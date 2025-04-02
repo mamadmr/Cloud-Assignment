@@ -11,7 +11,7 @@ Please follow these steps to complete and submit your assignment:
 
 2. **Create a folder with your full name** in the root of the project.  
    Example:
-
+```
       MohamadMahdiReisi/
     ├── Problem1_PostgreSQL/
     ├── Problem2_Redis/
@@ -19,7 +19,7 @@ Please follow these steps to complete and submit your assignment:
     ├── Problem4_WebAPI/
     ├── Problem5_NGINX/
     └── Problem6_DockerCompose/
-
+```
 
 4. **Add all your documents, source code, and configuration files** (e.g., Dockerfiles, `docker-compose.yml`, Python scripts, etc.) to the correct folder for each question.
 
