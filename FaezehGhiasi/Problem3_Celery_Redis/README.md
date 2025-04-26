@@ -51,6 +51,6 @@ This will build and start:
 - The Celery tasks run asynchronously in the background and communicate through Redis.
 - Containers are named consistently to avoid conflicts during start/stop operations.
 
----
+
 
 
