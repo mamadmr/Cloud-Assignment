@@ -63,4 +63,13 @@ You will see the subscriber receiving the published message and printing the upd
 - Python 3 must be installed.
 - Port `6379` and `5540` must be available on your system.
 
+  ## Screenshots 📸
+
+![image1](https://github.com/faezehghiasi/Cloud-Assignment/blob/FaezehGhiasi/docker-assignment/FaezehGhiasi/Problem2_Redis_Setup/images/Screenshot%20from%202025-04-19%2018-46-44.png?raw=true)
+
+
+![image2](https://github.com/faezehghiasi/Cloud-Assignment/blob/FaezehGhiasi/docker-assignment/FaezehGhiasi/Problem2_Redis_Setup/images/Screenshot%20from%202025-04-19%2018-46-59.png?raw=true)
+
+![image3](https://github.com/faezehghiasi/Cloud-Assignment/blob/FaezehGhiasi/docker-assignment/FaezehGhiasi/Problem2_Redis_Setup/images/Screenshot%20from%202025-04-19%2018-47-03.png?raw=true)
+
 
