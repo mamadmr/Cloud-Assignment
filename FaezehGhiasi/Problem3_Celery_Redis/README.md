@@ -33,14 +33,6 @@ This will build and start:
 - **Dockerfile.test**: Dockerfile for building the test runner image.
 - **requirements.txt**: Python dependencies for the project.
 
-## How to Run Test Tasks Manually
-
-If you want to manually run the test tasks without using the test runner container:
-
-```bash
-# Make sure Redis and Celery worker are running
-python test_tasks.py
-```
 
 ## Requirements
 
@@ -48,6 +40,10 @@ python test_tasks.py
 - Docker Compose must be installed.
 - Python 3 must be installed (for running test scripts manually).
 - Docker daemon must be running.
+- 
+## Screenshots 📸
+
+![image1](https://github.com/faezehghiasi/Cloud-Assignment/blob/FaezehGhiasi/docker-assignment/FaezehGhiasi/Problem3_Celery_Redis/images/Pasted%20image.png?raw=true)
 
 ## Notes
 
