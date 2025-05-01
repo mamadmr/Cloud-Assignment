@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7.0
+    container_name: redis
+    expose:
+      - 6379
+    ports:
+      - "6391:6379"
+  celery:
+    image: celery:5.2
+    container_name: celery
+    build: ./celery
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock # Mount Docker socket to allow Celery to communicate with Docker
+    depends_on:
+      - redis
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
