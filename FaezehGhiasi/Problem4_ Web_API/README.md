@@ -44,6 +44,10 @@ docker compose up --build
 - Python 3 must be installed (for local development).
 - Ports 8000, 5432, 6379, 8080, and 5540 must be available.
 
+## Screenshots 📸
+![Screenshot from 2025-05-02 01-22-56](https://github.com/user-attachments/assets/cdffbaa6-d40a-40b8-b247-9d9c5b00e824)
+![Screenshot from 2025-05-02 01-23-26](https://github.com/user-attachments/assets/a3bba297-0044-487c-8df9-45fb5905c846)
+
 ## Notes
 
 - Celery tasks are used to start and stop Docker containers asynchronously.
