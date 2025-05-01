@@ -43,4 +43,14 @@ You need to manually remove the volume if you wish to delete the stored data com
 - Docker Compose must be installed.
 - Port 8080 must be available and not used by another service.
 
+## Screenshots 📸
+
+
+![image](https://github.com/user-attachments/assets/b65173ba-fd61-45fa-8fc3-96591fadb9a4)
+
+
+![image](https://github.com/user-attachments/assets/a12d0be0-e5c3-4d9b-9880-3563e319a543)
+
+
+
 
