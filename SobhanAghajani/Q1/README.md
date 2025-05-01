@@ -42,6 +42,17 @@ docker stop postgres_container
 docker rm postgres_container
 ```
 ## Reconnect & Check Data: Use PowerShell then run SQL in the PostgreSQL shell
+
+```docker
+docker run --name postgres_container `
+  -e POSTGRES_PASSWORD=mysecretpassword `
+  -e POSTGRES_USER=myuser `
+  -e POSTGRES_DB=mydatabase `
+  -v pgdata:/var/lib/postgresql/data `
+  -p 5432:5432 `
+  -d postgres
+```
+
 ```docker
 docker exec -it postgres_container psql -U myuser -d mydatabase
 ```
