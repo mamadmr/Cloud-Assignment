@@ -41,12 +41,17 @@ This will build and start:
 - Python 3 must be installed (for running test scripts manually).
 - Docker daemon must be running.
 
+## Screenshots 📸
+![image](https://github.com/user-attachments/assets/b9b39ee7-e28a-4f85-9298-b104c3cad7cc)
+
 
 ## Notes
 
 - The Docker socket `/var/run/docker.sock` is mounted into the worker and test runner containers to allow Docker SDK to interact with the host's Docker engine.
 - The Celery tasks run asynchronously in the background and communicate through Redis.
 - Containers are named consistently to avoid conflicts during start/stop operations.
+
+
 
 
 
