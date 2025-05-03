@@ -1,2 +1,48 @@
 Masoud Hasani 40121243
 
+
+Deploy a Redis Server in a Docker Container:
+(i) Launch a Redis server inside a Docker container.
+-->
+docker run --name my-redis -p 6379:6379 -d redis
+
+(ii) Make sure the Redis server accepts client connections.
+-->
+goto redis shell: docker exec -it my-redis redis-cli
+
+
+
+
+Implement Inter-Process Communication Using Redis:
+(i) Write two separate programs (ideally in Python) that communicate through the Redis server.
+-->
+for python : pip install redis --break-system-packages
+
+
+(ii) In the first program:
+(a) Set multiple key-value pairs in Redis.
+(b) Publish messages to a Redis channel.
+-->
+Producer.py
+
+(iii) In the second program:
+(a) Retrieve and display the key-value pairs set by the first program.
+(b) Subscribe to the same Redis channel and display any messages published.
+-->
+Consumer.py
+
+
+
+
+Monitor Redis Activity Using a Redis Insight Tool:
+(i) Use a Redis GUI client (for example, RedisInsight) to watch the data and messages in real time.
+(ii) Take screenshots to show how the Redis server handles data and messages.
+-->
+run redis dockeriz : docker run -d --name redis-insight \
+  -p 8001:8001 \
+  redislabs/redisinsight:1.14.0
+
+
+then : http://localhost:8001
+
+
