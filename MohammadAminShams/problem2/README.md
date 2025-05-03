@@ -1,7 +1,5 @@
 # Problem 2: Setting up a Redis Server
 
-This guide walks you through deploying a Redis server using Docker, creating Python programs to interact with it, and monitoring Redis activity using RedisInsight.
-
 ---
 
 ## Part (a): Running Redis in Docker
@@ -10,9 +8,6 @@ This guide walks you through deploying a Redis server using Docker, creating Pyt
 
 ```bash
 docker pull redis
-
-docker network create   --subnet=172.20.0.0/16   custom
-
 docker run -d   --name redis-ctf   -p 6379:6379   --network custom   --ip 172.20.1.3   redis:latest
 ```
 
@@ -84,20 +79,14 @@ for message in pubsub.listen():
         print(f"Received message on {channel}: {message['data']}")
 ```
 
-### 4. Run the programs:
-
-First run the consumer:
+### 4. Run the below programs:
 
 ```bash
-python consumer.py
+python3 producer.py
 ```
-
-Then run the producer:
-
 ```bash
-python producer.py
+python3 consumer.py
 ```
-
 ---
 
 ## Part (c): Monitor Redis with RedisInsight
@@ -105,7 +94,7 @@ python producer.py
 ### 1. Run RedisInsight via Docker:
 
 ```bash
-docker run -d   --name redisinsight   -p 5540:5540   --network custom   --ip 172.20.1.4   redislabs/redisinsight:latest
+docker run -d  --name redisinsight  -p 5540:5540  --network custom  --ip 172.20.1.4   redislabs/redisinsight:latest
 ```
 
 ### 2. Access the Web UI:
@@ -118,9 +107,8 @@ http://localhost:5540
 
 Click **Add Redis Database** and fill in:
 
-- Host: `host.docker.internal` or `localhost`
+- Host: `172.20.1.3`
 - Port: `6379`
-- Name: `redis-ctf`
 
 ### 3. Monitor keys and messages:
 
@@ -128,33 +116,3 @@ Click **Add Redis Database** and fill in:
 - In **Pub/Sub**, subscribe to `ctf_channel` and observe messages.
 
 ---
-
-## Optional: Simple Test
-
-Create `test_redis.py`:
-
-```python
-import redis
-
-r = redis.Redis(host='localhost', port=6379, decode_responses=True)
-
-r.set("team:red", "assigned")
-value = r.get("team:red")
-print(f"The value of 'team:red' is: {value}")
-```
-
-Run the test:
-
-```bash
-python test_redis.py
-```
-
-Expected output:
-
-```
-The value of 'team:red' is: assigned
-```
-
----
-
-End of Guide ✅
