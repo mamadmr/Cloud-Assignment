@@ -4,10 +4,11 @@ This guide sets up a PostgreSQL database using Docker, creates a sample `ctf_db`
 
 ---
 
-### 📦 Step 1: Create Docker Volume
+### 📦 Step 1: Create Docker Volume and custom network
 
 ```bash
 docker volume create pgdata
+docker network create --driver bridge --subnet 172.20.1.0/24 --gateway 172.20.1.1  custom
 ```
 
 This creates a persistent Docker volume named `pgdata` to store PostgreSQL data.
@@ -33,6 +34,8 @@ docker run -d \
   -e POSTGRES_PASSWORD=admin \
   -v pgdata:/var/lib/postgresql/data \
   -p 5432:5432 \
+  --network custom \
+  --ip 172.20.1.2 \
   postgres:latest
 ```
 
