@@ -1,17 +1,6 @@
 # Problem 3: Container Management with Celery and Redis
 
-## Objective
-This problem involves setting up Celery with Redis as the message broker to manage Docker containers for CTF challenges. The tasks include configuring Celery, implementing tasks to start and stop containers, demonstrating their execution, and documenting the process with a video demonstration.
-
 ## Setup and Dependencies
-
-### Prerequisites
-- **Docker**: Installed and running (`docker --version`).
-- **Redis**: Running as a Docker container:
-  ```bash
-  docker run -d --name redis-ctf -p 6379:6379 redis:latest
-  ```
-- **Python**: Version 3.6 or higher (`python --version`).
 
 ### Dependencies
 Install the required Python libraries:
@@ -179,8 +168,6 @@ Stopping container...
 
 Container ctf-hello-world stopped.
 ```
-
-## Section (d): Documentation and Demonstration
 
 ### Summary
 - Used Redis as broker.
