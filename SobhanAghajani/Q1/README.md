@@ -59,3 +59,7 @@ docker exec -it postgres_container psql -U myuser -d mydatabase
 ```sql
 SELECT * FROM teams;
 ```
+
+
+# Video Link
+https://iutbox.iut.ac.ir/index.php/s/ecjQprSQqSeNLk5
