@@ -31,3 +31,9 @@ python subscriber.py
 ![](images/redis_insight.png)
 ### Monitor Messages
 ![](images/PubSub.png)
+
+
+
+
+## Video Link
+https://iutbox.iut.ac.ir/index.php/s/YycG44KCdY4PgRo
