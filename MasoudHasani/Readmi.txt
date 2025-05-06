@@ -1,2 +1,6 @@
 Masoud Hasani 40121243
 
+Needs:
+
+pip install docker celery redis
+sudo snap install redisinsight

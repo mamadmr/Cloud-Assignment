@@ -38,8 +38,6 @@ Monitor Redis Activity Using a Redis Insight Tool:
 (i) Use a Redis GUI client (for example, RedisInsight) to watch the data and messages in real time.
 (ii) Take screenshots to show how the Redis server handles data and messages.
 -->
-download redis : sudo snap install redisinsight
-
 Host : localhost
 port : 6379
 
