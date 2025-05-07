@@ -1,4 +1,3 @@
-Absolutely! Here's your updated and polished `README.md` for **Problem 2: Redis Server Setup**, now reflecting your improved Python scripts `producer.py` and `consumer.py`.
 
 # Problem 2: Redis Server Setup
 
@@ -108,7 +107,9 @@ for message in pubsub.listen():
 
 ### 📷 Screenshot
 
-![RedisInsight Screenshot]()
+![RedisInsight Screenshot](https://s6.uupload.ir/files/redis_database_emo4.png)
+
+![RedisInsight Screenshot](https://s6.uupload.ir/files/redis_messages_6wp2.png)
 
 ---
 
@@ -123,7 +124,7 @@ for message in pubsub.listen():
 
 ## 🎥 Demonstration Video
 
-📎 [Click here to view the video](https://iutbox.iut.ac.ir/your-upload-link)
+📎 [Click here to view the video](https://iutbox.iut.ac.ir/index.php/s/tySSiWT4NkpLrSY)
 
 > The video shows:
 >
