@@ -152,15 +152,6 @@ docker exec -it my_postgres psql -U myuser -d ctf_db -c "SELECT * FROM teams;"
 
 ## 📷 Screenshots
 
-(Optional) Save screenshots of:
-
-* Table creation
-* Inserting, updating, and deleting data
-* Viewing data in pgAdmin
-* Verifying persistence after container restart
-
-Place them in the `screenshots/` folder.
-
 ---
 
 ## 🎥 Demonstration Video
