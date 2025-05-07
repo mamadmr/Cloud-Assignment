@@ -79,6 +79,4 @@ celery -A celery_app worker --loglevel=info
 
 ### (ii)
 
-#### (a)
-
-#### (b)
+[video](https://iutbox.iut.ac.ir/index.php/s/GynPzipkrozZWjD)

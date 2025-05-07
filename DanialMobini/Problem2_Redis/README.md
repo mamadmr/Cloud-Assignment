@@ -90,3 +90,11 @@ for message in pubsub.listen():
 ![blue data](./blue.png)
 ![red data](./red.png)
 ![messages](./message.png)
+
+## (d)
+
+### (i)
+
+### (ii)
+
+[video](https://iutbox.iut.ac.ir/index.php/s/y3eeap78Ndsajnb)

@@ -2,5 +2,5 @@
 from tasks import start_container, stop_container
 
 # Start a container
-result = start_container.delay("nginx:latest", "my_nginx_container")
+result = start_container.delay("nginx:latest")
 print(result.get())  # Wait for the task to complete and get the result

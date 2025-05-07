@@ -7,9 +7,9 @@ client = docker.from_env()
 
 
 @app.task
-def start_container(image_name, m_name):
+def start_container(image_name):
     try:
-        container = client.containers.run(image=image_name, name=m_name, detach=True)
+        container = client.containers.run(image=image_name, detach=True)
         return f"Container started with ID: {container.id}"
     except Exception as e:
         return f"Error starting container: {str(e)}"

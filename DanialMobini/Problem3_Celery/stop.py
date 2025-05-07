@@ -3,6 +3,6 @@ from tasks import start_container, stop_container
 
 # Stop a container
 result = stop_container.delay(
-    "c51b31ab3a20be12d615f8cee5d9a96f98bbd67679f898cd2511658c37917fca"
+    "7a77b8564ff9df9fea97a473ac9b1c3cd6a1ffe847ba113e50d0f3f748c4cd4a"
 )
 print(result.get())
