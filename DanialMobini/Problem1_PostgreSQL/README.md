@@ -1,4 +1,4 @@
-## a)
+## (a)
 
 ```bash
 docker build [OPTIONS] PATH 
@@ -26,7 +26,7 @@ docker run -d --name postgres_ctf_danial -p 5432:5432 -v postgres_data:/var/lib/
   `-p` : Publish a container's port to the host.
   `-v` : Bind mount a volume.
 
-## b)
+## (b)
 
 ```bash
 docker exec [OPTIONS] CONTAINER COMMAND [ARG...]
@@ -88,6 +88,12 @@ DELETE 1
 
 ```
 
-## c)
+## (c)
+
+### (i)
 
 اول یک داکر فایل ساختم که در آن دیتا بیس و یوزر ایجاد می شد و به آن یک والیوم اختصاص دادم
+
+### (ii)
+
+
