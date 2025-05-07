@@ -30,9 +30,7 @@ docker run -d --name postgres_ctf_danial -p 5432:5432 -v postgres_data:/var/lib/
 
 ```bash
 docker exec [OPTIONS] CONTAINER COMMAND [ARG...]
-docker exec -it be03881a03521190f94fec53cc3efd4c93c4fbe83e63b65e593dabc278855e33 bash
-
-psql -h localhost -U admin -d ctf_db
+docker exec -it postgres_ctf_danial bash
 ```
 
 - `exec` : Run a command in a running container.
@@ -43,6 +41,10 @@ psql -h localhost -U admin -d ctf_db
 
 - `be03881a03521190f94fec53cc3efd4c93c4fbe83e63b65e593dabc278855e33` : The container ID.
 - `bash` : The command to run inside the container.
+
+```bash
+psql -h localhost -U admin -d ctf_db
+```
 
 ```sql
 -- Create a table to store team information
@@ -72,6 +74,7 @@ WHERE team_name = 'Red Team';
 
 -- Output:
 CREATE TABLE
+
 INSERT 0 2
  id | team_name | challenge_assigned 
 ----+-----------+--------------------
@@ -80,6 +83,7 @@ INSERT 0 2
 (2 rows)
 
 UPDATE 1
+
 DELETE 1
 
 ```
