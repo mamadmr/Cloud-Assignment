@@ -1,4 +1,3 @@
-Absolutely! Here's your updated and polished `README.md` for **Problem 2: Redis Server Setup**, now reflecting your improved Python scripts `producer.py` and `consumer.py`.
 
 # Problem 2: Redis Server Setup
 
