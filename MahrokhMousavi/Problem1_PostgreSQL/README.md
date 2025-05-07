@@ -4,8 +4,9 @@
 ## 📌 Description
 
 This part of the assignment demonstrates how to:
-- Deploy a PostgreSQL container using Docker with persistent storage and a **custom-defined user**.
-- Perform basic SQL operations (create database, create table, insert and retrieve data).
+
+- Deploy a PostgreSQL container using Docker with persistent storage and a custom-defined user.
+- Perform basic SQL operations (create database, create table, insert, update, delete, and retrieve data).
 - Prove that the data remains available even after stopping and removing the container.
 
 All PostgreSQL data is stored in a Docker-managed volume named `pgdata`, ensuring persistence across container lifecycles.
@@ -19,6 +20,11 @@ All PostgreSQL data is stored in a Docker-managed volume named `pgdata`, ensurin
 docker volume create pgdata
 ````
 
+* Creates a Docker-managed volume named `pgdata`.
+* This volume will store PostgreSQL's data files and ensure they persist even after the container is deleted.
+
+---
+
 ### 2. Run PostgreSQL Container with a Custom User
 
 ```bash
@@ -26,15 +32,20 @@ docker run -d \
   --name my_postgres \
   -e POSTGRES_USER=myuser \
   -e POSTGRES_PASSWORD=securepass123 \
-  -e POSTGRES_DB=teamdb \
   -v pgdata:/var/lib/postgresql/data \
   -p 5432:5432 \
   postgres
 ```
 
-* `POSTGRES_USER=myuser`: Creates a custom user named `myuser`.
-* `POSTGRES_PASSWORD=securepass123`: Sets the password.
-* `POSTGRES_DB=teamdb`: Automatically creates a database named `teamdb`.
+#### 🔍 Explanation of the Command:
+
+* `docker run -d`: Runs the container in detached mode (in the background).
+* `--name my_postgres`: Names the container `my_postgres` for easy reference.
+* `-e POSTGRES_USER=myuser`: Sets up a custom PostgreSQL user named `myuser` with superuser privileges.
+* `-e POSTGRES_PASSWORD=securepass123`: Sets the password for the `myuser` account (required).
+* `-v pgdata:/var/lib/postgresql/data`: Mounts the volume `pgdata` to PostgreSQL’s internal data directory, so all data is stored persistently outside the container.
+* `-p 5432:5432`: Maps port 5432 of the container (PostgreSQL default) to port 5432 on the host machine, allowing external access from clients like `psql` or pgAdmin.
+* `postgres`: Uses the official PostgreSQL Docker image.
 
 ---
 
@@ -43,71 +54,112 @@ docker run -d \
 ### 3. Access the container and open the psql shell
 
 ```bash
-docker exec -it my_postgres psql -U myuser -d teamdb
+docker exec -it my_postgres psql -U myuser -d postgres
 ```
 
 ### 4. Run SQL Commands
 
 ```sql
--- Create a table
-CREATE TABLE challenges (
-  id SERIAL PRIMARY KEY,
-  team_name VARCHAR(50),
-  challenge_desc TEXT
+-- Create a new database
+CREATE DATABASE ctf_db;
+
+-- Connect to the new database
+\c ctf_db
+
+-- Create a table to store team information
+CREATE TABLE teams (
+    id SERIAL PRIMARY KEY,
+    team_name VARCHAR(100) NOT NULL,
+    challenge_assigned BOOLEAN DEFAULT FALSE
 );
 
--- Insert sample data
-INSERT INTO challenges (team_name, challenge_desc) VALUES
-('Team Alpha', 'Solve the maze problem'),
-('Team Beta', 'Implement sorting algorithm');
+-- Insert sample data into the table
+INSERT INTO teams (team_name, challenge_assigned)
+VALUES 
+    ('Red Team', true),
+    ('Blue Team', false);
 
--- Retrieve data
-SELECT * FROM challenges;
+-- Retrieve all records from the table
+SELECT * FROM teams;
+
+-- Update a team's challenge assignment status
+UPDATE teams
+SET challenge_assigned = true
+WHERE team_name = 'Blue Team';
+
+-- Delete a team from the table
+DELETE FROM teams
+WHERE team_name = 'Red Team';
 ```
 
 ---
 
 ## 🔁 Demonstrate Persistence
 
-* Stop and remove the container:
+### Stop and remove the container:
 
 ```bash
 docker stop my_postgres
 docker rm my_postgres
 ```
 
-* Re-launch the container with the same volume:
+### Re-launch the container with the same volume:
 
 ```bash
 docker run -d \
   --name my_postgres \
   -e POSTGRES_USER=myuser \
   -e POSTGRES_PASSWORD=securepass123 \
-  -e POSTGRES_DB=teamdb \
   -v pgdata:/var/lib/postgresql/data \
   -p 5432:5432 \
   postgres
 ```
 
-* Reconnect and verify the data is still there:
+### Reconnect and verify the data is still there:
 
 ```bash
-docker exec -it my_postgres psql -U myuser -d teamdb -c "SELECT * FROM challenges;"
+docker exec -it my_postgres psql -U myuser -d ctf_db -c "SELECT * FROM teams;"
 ```
+
+✅ Your data remains available, proving the volume-based persistence works.
 
 ---
 
 ## 💡 Reasoning Behind Decisions
 
-* **Custom user (`myuser`)**: More secure and specific than using the default `postgres` user.
-* **Volume (`pgdata`)**: Ensures data persists even if the container is removed or recreated.
-* **Direct SQL access inside container**: Simple and direct method for demonstration without needing external tools.
+* **Custom user (`myuser`)**: Helps avoid default account usage and enforces clearer permission control.
+* **Docker volume (`pgdata`)**: Persists data outside the container's filesystem. Ensures the database is not lost if the container is removed.
+* **Detached container mode (`-d`)**: Keeps terminal free while the database service runs in the background.
+* **Host-to-container port mapping (`-p 5432:5432`)**: Makes PostgreSQL accessible from GUI tools like pgAdmin or the `psql` command on the host system.
+* **Official PostgreSQL image**: Clean, secure, and up-to-date.
+
+---
+
+## 🎨 Alternative: Use pgAdmin 4 to Connect to PostgreSQL
+
+1. Download and install pgAdmin 4: [https://www.pgadmin.org/download/](https://www.pgadmin.org/download/)
+2. Open pgAdmin and create a new server connection:
+
+   * **Name**: any name (e.g., `Local PostgreSQL`)
+   * **Host**: `localhost`
+   * **Port**: `5432`
+   * **Username**: `myuser`
+   * **Password**: `securepass123`
+3. Connect and expand `Databases → ctf_db → Schemas → Tables`
+4. Use the Query Tool to insert and query data visually
 
 ---
 
 ## 📷 Screenshots
 
+(Optional) Save screenshots of:
 
+* Table creation
+* Inserting, updating, and deleting data
+* Viewing data in pgAdmin
+* Verifying persistence after container restart
+
+Place them in the `screenshots/` folder.
 
 ---
 
@@ -119,6 +171,7 @@ Video covers:
 * Restarting the container
 * Showing that data persists
 
-📎 [Click here to view the video](https://iutbox.iut.ac.ir/my_link)
+📎 [Click here to view the video](https://iutbox.iut.ac.ir/your-upload-link)
 
 ---
+
