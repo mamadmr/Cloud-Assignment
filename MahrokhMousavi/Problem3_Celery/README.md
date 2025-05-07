@@ -161,19 +161,14 @@ docker ps -a
 
 ## 🖼️ Screenshots
 
-### 🔹 Initial State (Before Starting Task)
-
-> ![Initial Docker State](https://your-upload-link.com/before.png)
-
 ### 🔹 Celery Worker Output During Task Execution
 
-> ![Celery Logs](https://your-upload-link.com/logs.png)
+> ![Celery Logs](https://s6.uupload.ir/files/celery_kayc.png)
 
-### 🔹 Final State (After Stopping Container)
+### 🔹 Main.py output
 
-> ![Final Docker State](https://your-upload-link.com/after.png)
+> ![Final Docker State](https://s6.uupload.ir/files/main.py_c6pu.png)
 
-Replace the links above with your real screenshot URLs.
 
 ---
 
@@ -188,13 +183,12 @@ Replace the links above with your real screenshot URLs.
 
 ## 🎥 Demonstration Video
 
-📎 [Click here to view the video](https://iutbox.iut.ac.ir/your-video-link)
+📎 [Click here to view the video](https://iutbox.iut.ac.ir/index.php/s/3HYYwb4TWyjwxTc)
 
 > Should show:
 >
 > * Running `main.py`
 > * Celery logs
-> * `docker ps -a` before and after
 > * Confirmation that container was started, stopped, and removed
 
 ---
