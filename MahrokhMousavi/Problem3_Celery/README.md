@@ -129,6 +129,26 @@ celery -A tasks worker --loglevel=info
 
 ---
 
+## ⚠️ Windows Users (Python 3.12+)
+
+If you're using **Windows with Python 3.12 or later**, Celery may crash with an error like:
+
+```
+ValueError: not enough values to unpack (expected 3, got 0)
+```
+
+### ✅ Fix:
+
+Use the `solo` pool to avoid multiprocessing issues:
+
+```bash
+celery -A tasks worker --loglevel=info --pool=solo
+```
+
+This runs Celery tasks in the main process — perfectly fine for development.
+
+---
+
 ## 🧪 Verify Docker Container State
 
 You can observe changes before and after each task using:
@@ -153,6 +173,7 @@ docker ps -a
 
 > ![Final Docker State](https://your-upload-link.com/after.png)
 
+Replace the links above with your real screenshot URLs.
 
 ---
 
