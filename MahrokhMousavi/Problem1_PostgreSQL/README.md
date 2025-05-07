@@ -152,6 +152,9 @@ docker exec -it my_postgres psql -U myuser -d ctf_db -c "SELECT * FROM teams;"
 
 ## 📷 Screenshots
 
+![pgAdmin Screenshot](https://s6.uupload.ir/files/pdadmin_tj5m.png)
+
+
 ---
 
 ## 🎥 Demonstration Video
@@ -162,7 +165,7 @@ Video covers:
 * Restarting the container
 * Showing that data persists
 
-📎 [Click here to view the video](https://iutbox.iut.ac.ir/your-upload-link)
+📎 [Click here to view the video](https://iutbox.iut.ac.ir/index.php/s/cgESb7zbT6t88r9)
 
 ---
 
