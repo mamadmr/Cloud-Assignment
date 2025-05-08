@@ -1,3 +1,4 @@
+## web app
 I wrote django application with 5 apis 3 of them is for authenticating and registering.(ignore get-ip and token/refresh )
 swagger is not implemented instead I explain my apis here
 	
@@ -5,7 +6,7 @@ instead of explaining APIs I implemented a swagger.
 
 run docker compose up --build and the visit localhost:3000/docs to see the swagger.
 
-Database schema:
+# Database schema:
 cloud_team is an AbstractUser means that it has everything that a normal user would have.
 Like username and password and email.
 
