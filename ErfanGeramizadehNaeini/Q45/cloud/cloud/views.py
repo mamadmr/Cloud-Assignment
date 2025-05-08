@@ -7,6 +7,8 @@ from rest_framework import status
 from celery import Celery
 from .models import Problem, Team, TeamProblem
 from django.conf import settings
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiResponse, inline_serializer
+from rest_framework import serializers
 app = Celery(
     'client',
     broker=settings.CELERY_BROKER_URL,
@@ -17,6 +19,18 @@ app = Celery(
 class StartStopView(views.APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        request=inline_serializer(
+            name='StartRequest',
+            fields={
+                'problem': serializers.IntegerField()
+            }
+        ),
+        responses={
+            200: inline_serializer(name='StartSuccess', fields={'status': serializers.CharField(), 'address': serializers.CharField()}),
+            400: inline_serializer(name='StartFailure', fields={'error': serializers.CharField()})
+        }
+    )
     def post(self, request):
         problem = request.data.get("problem")
         if (not problem or not Problem.objects.filter(number=problem).exists()):
@@ -52,6 +66,18 @@ class StartStopView(views.APIView):
 
         return Response({"status": "started", "address": request.get_host().split(":")[0]+":"+str(index)}, status=200)
 
+    @extend_schema(
+        request=inline_serializer(
+            name='StopRequest',
+            fields={
+                'problem': serializers.IntegerField()
+            }
+        ),
+        responses={
+            200: inline_serializer(name='StopSuccess', fields={'status': serializers.CharField()}),
+            400: inline_serializer(name='StopFailure', fields={'error': serializers.CharField()})
+        }
+    )
     def delete(self, request):
         problem = request.data.get("problem")
         if (not problem or not Problem.objects.filter(number=problem).exists()):
@@ -71,26 +97,39 @@ class StartStopView(views.APIView):
         return Response({"status": "stoped"}, status=200)
 
 
-class GetIPView(views.APIView):
-    permission_classes = [IsAuthenticated]
+# class GetIPView(views.APIView):
+#     permission_classes = [IsAuthenticated]
 
-    def get(self, request):
-        problem = request.data.get("problem")
-        if (not problem or not Problem.objects.filter(id=problem).exists()):
-            return Response({"error": "problem not found"}, status=400)
-        instance = TeamProblem.objects.filter(
-            problem=problem, team=request.user).first()
-        if not instance:
-            return Response({"error": "instance is not up for this team"}, status=400)
-        elif not instance.up:
-            return Response({"error": "instance is not up"}, status=400)
+#     def get(self, request):
+#         problem = request.data.get("problem")
+#         if (not problem or not Problem.objects.filter(id=problem).exists()):
+#             return Response({"error": "problem not found"}, status=400)
+#         instance = TeamProblem.objects.filter(
+#             problem=problem, team=request.user).first()
+#         if not instance:
+#             return Response({"error": "instance is not up for this team"}, status=400)
+#         elif not instance.up:
+#             return Response({"error": "instance is not up"}, status=400)
 
-        return Response({"ip": instance.ip}, status=200)
+#         return Response({"ip": instance.ip}, status=200)
 
 
 class TeamRegisterView(views.APIView):
     permission_classes = [AllowAny]
 
+    @extend_schema(
+        request=inline_serializer(
+            name='RegisterRequest',
+            fields={
+                'username': serializers.CharField(),
+                'password': serializers.CharField()
+            }
+        ),
+        responses={
+            201: inline_serializer(name='RegisterSuccess', fields={'access': serializers.CharField(), 'refresh': serializers.CharField()}),
+            400: OpenApiResponse(description='Error')
+        }
+    )
     def post(self, request):
 
         team_name = request.data.get('username')

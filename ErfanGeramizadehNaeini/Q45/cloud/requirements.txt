@@ -25,3 +25,4 @@ urllib3==2.3.0
 celery
 dj-rest-auth
 django-allauth
+drf-spectacular
