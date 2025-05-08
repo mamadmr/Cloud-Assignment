@@ -1,3 +1,4 @@
+## celery
 The docker compose will bring uo the redis as well as celery 
 I useed this bind mount so I can run docker containers outside of the existing container
 - /var/run/docker.sock:/var/run/docker.sock
