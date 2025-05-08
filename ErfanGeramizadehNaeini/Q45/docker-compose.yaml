@@ -32,8 +32,6 @@ services:
     container_name: cloudredis
     expose:
       - 6379
-    ports:
-      - "6391:6379"
 
   celery:
     image: celery:5.2

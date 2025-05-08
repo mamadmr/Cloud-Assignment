@@ -16,6 +16,6 @@ container_id = app.send_task('tasks.start', args=[
 id = container_id.get(timeout=1000)
 print("Container ID:", id)  # pulling may take time
 
-result = app.send_task('tasks.stop', args=[id])
-print("Sent stop task, waiting for result...")
-print(result.get(timeout=20))
+# result = app.send_task('tasks.stop', args=[id])
+# print("Sent stop task, waiting for result...")
+# print(result.get(timeout=20))
