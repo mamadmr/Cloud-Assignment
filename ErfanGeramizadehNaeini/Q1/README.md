@@ -1,3 +1,4 @@
+## postgres
 ``` docker run --rm -d --name pg -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=ERFAN1234 -e POSTGRES_DB=postgres -p 15432:5432 -v pgdata:/var/lib/postgresql/data postgres:14```
 
 POSTGRES_PASSWORD and POSTGRES_USER for the credentials neede for authenticating
