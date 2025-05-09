@@ -74,4 +74,3 @@ This project provides a Docker Compose configuration to set up a PostgreSQL data
 
 --- 
 
-Feel free to modify this based on additional project requirements or details!
