@@ -1,4 +1,4 @@
-## Problem2: Redis
+## Problem 2: Redis
 
 IUTBox link:
 <br />

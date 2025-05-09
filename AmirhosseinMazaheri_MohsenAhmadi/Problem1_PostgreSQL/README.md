@@ -14,7 +14,7 @@ after creating a volume we run the database container:
 ```bash
 docker run -d \
     --name ctf_db \ 
-    -e POSTGRES_USER=admin 
+    -e POSTGRES_USER=admin \
     -e POSTGRES_PASSWORD=admin \
     -v db_data:/var/lib/postgresql/data \
     -p 5432:5432 \
