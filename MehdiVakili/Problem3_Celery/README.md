@@ -181,3 +181,5 @@ docker-compose logs -f worker
 docker ps -a
 docker logs team42-nginx
 ```
+---
+🎥 [Watch the video](https://iutbox.iut.ac.ir/index.php/s/G3WKBDLfL8d22j7)

@@ -113,6 +113,8 @@ docker exec -it ctf_db psql -U ctftest -d ctfdb -c "SELECT * FROM teams;"
 **Explanation:** Executes SQL command directly without entering the interactive shell. `-c` specifies the SQL command to run.
 
 ---
+🎥 [Watch the video](https://iutbox.iut.ac.ir/index.php/s/zDrfM8Hbxp5WXP9)
+---
 
 ## Conclusion
 

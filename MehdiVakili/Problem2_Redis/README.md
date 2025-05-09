@@ -181,3 +181,6 @@ Once RedisInsight is connected to your Redis server, you can watch keys and real
 
 ![RedisInsight Key Browser ](redis_insight_example.png)
 
+---
+🎥 [Watch the video](https://iutbox.iut.ac.ir/index.php/s/nGpMR9c4xGQ9LRM)
+
