@@ -1,4 +1,3 @@
-Here’s a suggested README section for your `docker-compose.yml` configuration:
 
 ---
 
