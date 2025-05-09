@@ -11,3 +11,7 @@ docker run: Starts a new container from an image.
 -p 5432:5432: Maps port 5432 on the host to port 5432 in the container, allowing external access to PostgreSQL.
 
 postgres: Specifies the Docker image to use (official PostgreSQL image).
+
+
+In this video, we can see that data will not be lost after restarting the container.
+https://iutbox.iut.ac.ir/index.php/s/sQwrW9dCkXtNcPZ
