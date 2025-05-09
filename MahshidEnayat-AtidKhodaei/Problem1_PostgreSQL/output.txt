@@ -1,0 +1,91 @@
+C:\Users\Mahshid>docker volume create pgdata
+pgdata
+
+C:\Users\Mahshid>docker volume inspect pgdata
+[
+    {
+        "CreatedAt": "2025-04-17T07:34:57Z",
+        "Driver": "local",
+        "Labels": null,
+        "Mountpoint": "/var/lib/docker/volumes/pgdata/_data",
+        "Name": "pgdata",
+        "Options": null,
+        "Scope": "local"
+    }
+]
+
+C:\Users\Mahshid>docker run --name postgres-ctf -e POSTGRES_USER=ctfuser -e POSTGRES_PASSWORD=ctfpass -e POSTGRES_DB=ctfdb -v pgdata:/var/lib/postgresql/data -p 5432:5432 -d postgres:latest
+Unable to find image 'postgres:latest' locally
+latest: Pulling from library/postgres
+8a628cdd7ccc: Pull complete
+e4847368ad17: Pull complete
+97cdd47d9131: Pull complete
+2817206b0512: Pull complete
+3a6f8814136c: Pull complete
+07db60713289: Pull complete
+0c942aac37b1: Pull complete
+8c63b71925de: Pull complete
+97f28320a07a: Pull complete
+2a08aad74366: Pull complete
+6cea4d95608f: Pull complete
+c1b7de8085d1: Pull complete
+f15c43cffa70: Pull complete
+6948dc7760c1: Pull complete
+Digest: sha256:fe3f571d128e8efadcd8b2fde0e2b73ebab6dbec33f6bfe69d98c682c7d8f7bd
+Status: Downloaded newer image for postgres:latest
+ce1d727d70f8d741c687310ade2493749ea1971e198cd29c8bbabbdca3c46e28
+
+C:\Users\Mahshid>docker ps
+CONTAINER ID   IMAGE             COMMAND                  CREATED         STATUS          PORTS                    NAMES
+ce1d727d70f8   postgres:latest   "docker-entrypoint.s…"   4 seconds ago   Up 4 seconds    0.0.0.0:5432->5432/tcp   postgres-ctf
+970abf102fd9   redis             "docker-entrypoint.s…"   3 days ago      Up 37 minutes   0.0.0.0:6379->6379/tcp   my-Redis
+
+C:\Users\Mahshid>docker exec -it postgres-ctf psql ctfuser -d ctfdb
+psql (17.4 (Debian 17.4-1.pgdg120+2))
+Type "help" for help.
+
+C:\Users\Mahshid>docker exec -it postgres-ctf psql ctfuser -d ctfdb
+psql (17.4 (Debian 17.4-1.pgdg120+2))
+Type "help" for help.
+
+ctfdb=# CREATE TABLE teams (
+    id SERIAL PRIMARY KEY,
+    team_name VARCHAR(100) NOT NULL,
+    challenge_assigned BOOLEAN DEFAULT FALSE
+);
+CREATE TABLE
+ctfdb=# INSERT INTO teams (team_name, challenge_assigned)
+VALUES
+    ('Red Team', true),
+    ('Blue Team', false);
+INSERT 0 2
+ctfdb=# SELECT * FROM teams;
+ id | team_name | challenge_assigned
+----+-----------+--------------------
+  1 | Red Team  | t
+  2 | Blue Team | f
+(2 rows)
+
+ctfdb=# \q
+
+C:\Users\Mahshid>docker stop postgres-ctf
+postgres-ctf
+
+C:\Users\Mahshid>docker rm postgres-ctf
+postgres-ctf
+
+C:\Users\Mahshid>docker run --name postgres-ctf -e POSTGRES_USER=ctfuser -e POSTGRES_PASSWORD=ctfpass -e POSTGRES_DB=ctfdb -v pgdata:/var/lib/postgresql/data -p 5432:5432 -d postgres:latest
+0c885daf2f886852cfef5e42bbfe6245813171fe06038d6f63f2027b3ac1f880
+
+C:\Users\Mahshid>docker exec -it postgres-ctf psql -U ctfuser -d ctfdb
+psql (17.4 (Debian 17.4-1.pgdg120+2))
+Type "help" for help.
+
+ctfdb=# SELECT * FROM teams;
+ id | team_name | challenge_assigned
+----+-----------+--------------------
+  1 | Red Team  | t
+  2 | Blue Team | f
+(4 rows)
+
+ctfdb=# \q
