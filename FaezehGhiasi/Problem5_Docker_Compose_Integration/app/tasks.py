@@ -5,12 +5,17 @@ import docker
 client = docker.from_env()
 
 @app.task(bind=True)
-def start_container(self, image_name, container_name):
+def start_container(self, image_name, container_name, host_port=None, container_port=None):
     try:
+        ports = None
+        if host_port:
+            ports = {f"{container_port}/tcp": host_port}
+
         container = client.containers.run(
             image_name,
             name=container_name,
-            detach=True
+            detach=True,
+            ports=ports
         )
         return container.id
     except docker.errors.APIError as exc:
