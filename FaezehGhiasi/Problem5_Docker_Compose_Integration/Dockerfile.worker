@@ -1,0 +1,9 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+COPY app/celery_app.py app/tasks.py ./
+
+RUN pip install --no-cache-dir celery redis docker
+
+CMD ["celery", "-A", "tasks", "worker", "--loglevel=info"]

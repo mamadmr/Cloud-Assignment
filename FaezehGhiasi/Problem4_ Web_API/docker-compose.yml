@@ -1,0 +1,63 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: FaezehGhiasi
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: ctfdb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: fastapi_appp
+    ports:
+      - "8000:8000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    depends_on:
+      - db
+      - redis
+
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    container_name: celery_worker
+    depends_on:
+      - redis
+      - db
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+  redisinsight:
+    image: redis/redisinsight:latest
+    container_name: redisinsight
+    restart: always
+    ports:
+      - "5540:5540"
+
+volumes:
+  postgres_data:
+
+

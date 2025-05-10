@@ -1,0 +1,31 @@
+ Python files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.swp
+
+# Virtual environments
+venv/
+ENV/
+
+# Docker
+.dockerignore
+Dockerfile
+
+# VSCode settings
+.vscode/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Compiled files
+*.so
+
+# Others
+.idea/
+

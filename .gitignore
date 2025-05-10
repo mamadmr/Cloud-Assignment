@@ -1,0 +1,24 @@
+# Ignore virtual environments
+venv/
+ENV/
+env/
+.venv/
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore IDE/editor config files
+.vscode/
+.idea/
+*.swp
+
+# Ignore Docker files (if needed)
+*.log
+
+# Ignore compiled output
+*.out
+*.class
+
