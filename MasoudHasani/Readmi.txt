@@ -1,6 +1,8 @@
 Masoud Hasani 40121243
 
-Needs:
+Requirement:
 
 pip install docker celery redis
-sudo snap install redisinsight
+snap install redisinsight
+pip install fastapi uvicorn docker
+snap install postman
