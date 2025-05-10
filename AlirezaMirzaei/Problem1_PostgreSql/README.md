@@ -40,3 +40,7 @@ This here is a quick way to spin up a PostgreSQL database with my schema and sam
    docker volume rm postgres_data
    ./setup-postgres.sh
    ```
+
+### End. The video links:
+
+https://iutbox.iut.ac.ir/index.php/s/oLbwink98GPyA36

@@ -119,3 +119,6 @@ This Celery setup integrates with:
 1. **Redis Server**: Used as message broker and result backend
 2. **Docker Engine**: For container management
 3. **Web Application**: Can call these tasks to provision CTF environments
+
+### End. The video links:
+https://iutbox.iut.ac.ir/index.php/s/oLbwink98GPyA36

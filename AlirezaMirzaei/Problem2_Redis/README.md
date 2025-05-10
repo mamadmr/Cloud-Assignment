@@ -53,6 +53,9 @@ We also need a lightweight pub/sub demo alongside Redis key/value storage, so he
    - Run `docker stop redis-server` and `docker rm redis-server`.
    - Run the commands above again.
 
+### End. The video links:
+https://iutbox.iut.ac.ir/index.php/s/oLbwink98GPyA36
+
 ---
 
 That’s exactly how I went step-by-step through each setup for this assignment—hope it’s clear and easy to follow from my perspective!
