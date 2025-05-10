@@ -9,11 +9,12 @@ fi
 
 # Run the consumer in background
 echo "Starting Redis consumer in background..."
-./redis-consumer.py > consumer.log 2>&1 &
+./redis-consumer.py &
 CONSUMER_PID=$!
 
 echo "Consumer started with PID $CONSUMER_PID"
 echo "Consumer logs are being written to consumer.log"
+
 
 # Wait a bit to ensure consumer is ready
 sleep 2

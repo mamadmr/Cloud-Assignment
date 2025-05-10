@@ -13,7 +13,7 @@ docker run --name postgres_ctf \
   -v $(pwd)/initdb.sql:/docker-entrypoint-initdb.d/init-db.sql \
   postgres:14-alpine
 
-# 3. Wait until Postgres is actually ready
+# Wait until Postgres is actually ready
 echo "Waiting for PostgreSQL to initialize…"
 until docker exec postgres_ctf pg_isready -U postgres >/dev/null 2>&1; do
   sleep 1
