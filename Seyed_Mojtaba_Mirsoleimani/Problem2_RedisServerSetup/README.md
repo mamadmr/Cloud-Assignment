@@ -1,4 +1,3 @@
-````markdown
 # Redis Server Setup with Docker & Python
 
 > This project demonstrates how to:
@@ -38,7 +37,6 @@
 1. Open a terminal and navigate to the project root:
    ```bash
    cd /path/to/your/project
-````
 
 2. Build the Docker image:
 
@@ -134,23 +132,6 @@ docker logs -f redis_server_setup
    ![Pub/Sub Monitor](./screenshots/redisinsight_pubsub.png)
 
 ---
-
-## Recording a Short Demo Video
-
-Capture a 20–30 second video that shows:
-
-1. Starting the Docker container and Redis server coming online.
-2. Publisher and Subscriber exchanging messages.
-3. Real‑time message flow in RedisInsight’s Pub/Sub monitor.
-
-You can attach the video to a GitHub Release or include a link in your repository’s Wiki.
-
----
-
-## License
-
-This project is released under the MIT License.
-Feel free to open issues or submit pull requests for improvements.
 
 ```
 ```
