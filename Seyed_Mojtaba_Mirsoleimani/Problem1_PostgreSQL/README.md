@@ -139,16 +139,4 @@ docker stop postgreSQL_container && docker rm postgreSQL_container
 docker volume rm postgreSQL_volume
 ```
 
-## Documentation & Demo Video
-
-1. **Documentation**: Detailed steps and decision rationale are provided in the project report file.
-2. **Demo Video**: A short (≤30s) screen recording showing:
-
-   * Retrieving the inserted data inside `psql`.
-   * Stopping and removing the container.
-   * Relaunching the container and re-verifying data persistence.
-
----
-
-Feel free to raise issues or submit pull requests if you find improvements!
 
