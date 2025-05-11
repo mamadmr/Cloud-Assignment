@@ -1,4 +1,6 @@
-sh
+
+# اتصال به دیتابیس 
+   ```bash
     docker exec -it first-container psql -U myuser -d mydb
    ```
 # ایجاد volume  
@@ -25,6 +27,5 @@ docker rm pg-container
 ```bash
 https://iutbox.iut.ac.ir/index.php/s/JwnAZfK7be9AesA
 ```
-
 
 
