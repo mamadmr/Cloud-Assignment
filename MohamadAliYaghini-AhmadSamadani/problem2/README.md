@@ -3,7 +3,7 @@
 ---
 
 ## a) Run Redis with container
-
+---
 ### Step 1: run Redis and test connection:
 
 ```bash
@@ -11,15 +11,15 @@ docker run -d --name redis-ctf -p 6379:6379 redis
 docker ps
 docker exec -it redis-ctf redis-cli
 ```
-
+---
 ## b) Implement Inter-Process Communication Using Redis
-
+---
 ### Step 1: Install Redis library:
 
 ```bash
 pip install redis
 ```
-
+---
 ### Step 2: Create `sender.py`:
 
 ```python
@@ -39,7 +39,7 @@ for msg in messages:
     print(f"Send to {channel}: {msg}")
     time.sleep(1)
 ```
-
+---
 ### Step 3: Create `receiver.py`:
 
 ```python
@@ -69,13 +69,13 @@ for message in pubsub.listen():
 ---
 
 ## c) Monitor Redis with RedisInsight
-
+---
 ### Step 1: Run RedisInsight via Docker:
 
 ```bash
 docker run -d  --name redisinsight  -p 5540:5540  redislabs/redisinsight
 ```
-
+---
 ### Step 2: Web UI:
 
 ```

@@ -2,7 +2,6 @@ from celery import Celery
 import docker
 from celery.exceptions import SoftTimeLimitExceeded
 
-# Configure Celery with Redis as the broker
 app = Celery(
     'ctf_tasks',
     broker='redis://localhost:6379/0',
@@ -18,13 +17,11 @@ app.conf.update(
     enable_utc=True,
 )
 
-# Initialize Docker client
 docker_client = docker.from_env()
 
 @app.task(bind=True, soft_time_limit=30, time_limit=40)
 def start_container(self, image_name, container_name):
     try:
-        # Check if container already exists
         try:
             existing_container = docker_client.containers.get(container_name)
             if existing_container.status == 'running':
@@ -33,7 +30,6 @@ def start_container(self, image_name, container_name):
                 existing_container.start()
                 return f"Container {container_name} started."
         except docker.errors.NotFound:
-            # Create and start new container
             container = docker_client.containers.run(
                 image_name,
                 name=container_name,
