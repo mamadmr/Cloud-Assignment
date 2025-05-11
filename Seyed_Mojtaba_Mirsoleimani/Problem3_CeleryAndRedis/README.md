@@ -1,4 +1,3 @@
-````markdown
 # Container Management with Celery & Redis
 
 > This project shows how to:
@@ -38,7 +37,8 @@
    ```bash
    git clone https://github.com/yourusername/ctf-container-tasks.git
    cd ctf-container-tasks
-````
+
+---
 
 2. (Optional) Create and activate a virtual environment:
 
@@ -173,19 +173,6 @@ This script will:
   # After the script finishes, verify the container has stopped:
   docker ps -a
   ```
-
----
-
-## Recording a Demo Video
-
-Capture a \~60‑second video that shows:
-
-1. Starting Redis (if not already running).
-2. Launching the Celery worker.
-3. Running `utilis.py` and observing tasks in the worker log.
-4. Checking Docker to see the container start and then stop.
-
-Include your video link in a GitHub Release or the repo’s Wiki.
 
 ---
 
