@@ -52,3 +52,5 @@ source .venv/bin/activate
 
 and now we can run `publisher.py` and then `subscriber.py` to see the results.
 
+## Redis Insight Results
+![insertion](images/redis.png)
