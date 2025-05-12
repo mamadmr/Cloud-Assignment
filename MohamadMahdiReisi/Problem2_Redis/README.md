@@ -91,21 +91,10 @@ python3 redis_writer.py
 python3 redis_reader.py
 ```
 
-## Redis Monitoring
-
-### Using RedisInsight
-1. Download and install [RedisInsight](https://redis.com/redis-enterprise/redis-insight/)
-2. Connect to `localhost:6379`
-3. Monitor:
-   - Keys in real-time
-   - Pub/Sub channels
-   - Memory usage
-
 ### Screenshot Checklist
-- RedisInsight connection screen
-- Key browser showing stored data
-- Pub/Sub channel with messages
-- Memory and performance metrics
+**desierd output**
+<img src="./../../shots/q2/Screenshot from 2025-05-12 01-45-19.png" width="400" alt="">
+<img src="./../../shots/q2/Screenshot from 2025-05-12 01-45-47.png" width="400" alt="">
 
 ## Demonstration
 

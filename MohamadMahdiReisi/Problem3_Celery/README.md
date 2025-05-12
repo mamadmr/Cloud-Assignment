@@ -97,6 +97,9 @@ You can trigger container operations by running simple Python scripts.
 
 Check the output of the Celery worker terminal for task results and error messages.
 
+**desierd output**
+<img src="./../../shots/q3/Screenshot from 2025-05-12 15-19-42.png" width="400" alt="">
+<img src="./../../shots/q3/Screenshot from 2025-05-12 15-20-27.png" width="400" alt="">
 ---
 
 
