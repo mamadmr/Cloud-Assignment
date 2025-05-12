@@ -4,5 +4,7 @@ Requirement:
 
 pip install docker celery redis
 snap install redisinsight
-pip install fastapi uvicorn docker
+pip install fastapi uvicorn sqlalchemy
 snap install postman
+sudo apt install sqlite3
+
