@@ -1,2 +1,52 @@
 Masoud Hasani 40121243
 
+
+Very important point: Make sure this Problem is placed in a file that does not use spaces in its path because Docker Compose cannot detect spaces.
+
+
+Create a Docker Compose Setup:
+(i) Define all services in a docker-compose.yml.
+(ii) Set up networking and dependencies so that each service can reach the others (e.g.,the web app can access PostgreSQL, Redis, and Celery).
+(iii) Use volume mounts for any services that need persistent data (e.g., PostgreSQL).
+-->
+	All requirements are written and followed in the docker-compose.yml file.
+	Problem 5: Docker Compose Integration/
+	│
+	├── docker-compose.yml              # Defines all services
+	│
+	├── requirements.txt                # Python dependencies
+	│
+	├── app/                            # Main application directory
+	│   │
+	│   ├── main.py                     # FastAPI app and API endpoints
+	│   ├── tasks.py                    # Celery background tasks (Docker control)
+	│   ├── db.py                       # Database connection settings
+	│   ├── models.py                   # SQLAlchemy model for active containers
+	│   └── Dockerfile                  # Dockerfile for building FastAPI & Celery worker
+	│
+	└── postgres_data/                  # Volume for PostgreSQL persistence (auto-created)
+	
+	
+	sudo docker build -t ctf_challenge_1 .
+	sudo docker compose up --build
+
+	
+Ensure System Initialization and Operation:
+(i) When you run docker-compose up, the whole system should start and work.
+(ii) You should be able to assign and remove challenges via the API with the Postman.
+-->
+	in postman:
+		POST http://localhost:8000/assign/?team_id=team1&challenge_id=1    	#to assign
+		DELETE http://localhost:8000/remove/?team_id=team1&challenge_id=1	#to remove
+		GET http://localhost:8000/containers/					#to view active containers
+		
+		
+		
+to remove all thing :
+-->
+	docker rm -f postgres_db redis_broker
+	or
+	to remove all stopped container:
+	docker container prune
+
+

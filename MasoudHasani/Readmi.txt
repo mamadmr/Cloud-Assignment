@@ -7,4 +7,4 @@ snap install redisinsight
 pip install fastapi uvicorn sqlalchemy
 snap install postman
 sudo apt install sqlite3
-
+sudo apt  install docker-compose

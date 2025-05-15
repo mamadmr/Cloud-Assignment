@@ -1,0 +1,54 @@
+version: '3.9'
+
+services:
+  web:
+    build: ./app
+    container_name: fastapi_app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+      - db
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@db:5432/ctf_db
+      - CELERY_BROKER_URL=redis://redis:6379/0
+    volumes:
+      - ./app:/code
+    working_dir: /code
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+  redis:
+    image: redis
+    container_name: redis_broker
+    ports:
+      - "6379:6379"
+
+  db:
+    image: postgres
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: ctf_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  celery_worker:
+    build: ./app
+    container_name: celery_worker
+    depends_on:
+      - redis
+      - db
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@db:5432/ctf_db
+      - CELERY_BROKER_URL=redis://redis:6379/0
+    volumes:
+      - ./app:/code
+      - /var/run/docker.sock:/var/run/docker.sock 
+    working_dir: /code
+    command: celery -A tasks worker --loglevel=info
+
+volumes:
+  postgres_data:
