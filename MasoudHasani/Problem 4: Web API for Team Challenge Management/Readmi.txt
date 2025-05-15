@@ -1,0 +1,63 @@
+Masoud Hasani 40121243
+
+
+Develop a Web API for Challenge Management:
+(i) Create API endpoints that:
+(a) Assign a specific CTF container to a team based on a team ID and a challenge ID.
+(b) Remove a CTF container from a team using the team ID and the challenge ID.
+(c) the address of the container have to be in the response
+-->
+	folder /a
+	to test it :
+		1. write the docker which we want to handle it (ctf_test)
+		2. build image : docker build -t ctf_challenge_1 . 
+		(its name is for example ctf_challenge_1)
+		3. uvicorn main_a:app --reload
+		4. in postman : 
+			(A) POST http://127.0.0.1:8000/assign/?team_id=team1&challenge_id=1
+			(B) DELETE http://127.0.0.1:8000/remove/?team_id=team1&challenge_id=1
+
+
+
+Integrate with a Database for Persistent Storage:
+(i) Update this database from the API when containers are assigned or removed and active containers.
+-->
+	folder /b
+	to test it :	
+		3. uvicorn main_b:app --reload
+		4. in postman : 
+			(A) POST http://127.0.0.1:8000/assign/?team_id=team1&challenge_id=1
+			(B) DELETE http://127.0.0.1:8000/remove/?team_id=team1&challenge_id=1
+			(C) GET http://127.0.0.1:8000/active/    ( to check active container )
+
+
+Use Celery with Redis for Background Task Processing:
+(i) Configure Celery to use Redis as the message broker.
+(ii) Write Celery tasks that:
+(a) Start a Docker container for a specified CTF challenge and link it to a team.
+(b) Stop and remove a Docker container that is linked to a team and a challenge.
+-->
+	folder /c
+	1. docker run --name my-redis -p 6379:6379 -d redis
+	2. uvicorn main_c:app --reload
+	3. celery -A tasks.app worker --loglevel=info
+	4. in postman : 
+		(A) POST http://127.0.0.1:8000/assign_async/?team_id=team1&challenge_id=1
+		(B) DELETE http://127.0.0.1:8000/remove_async/?team_id=team1&challenge_id=1
+		(C) GET http://127.0.0.1:8000/active/    ( to check active container )
+	
+
+
+
+Test the API Using Postman:
+(i) Use Postman (or a similar tool) to send requests to your API endpoints for assigning and removing containers.
+-->
+	Each step shows how to use Postman.
+
+
+(ii) Confirm that the API responds correctly and that containers are started or stopped. Also check that your database updates correctly.
+-->
+	to check db:
+		sqlite3 ctf.db
+		SELECT * FROM active_containers;
+
