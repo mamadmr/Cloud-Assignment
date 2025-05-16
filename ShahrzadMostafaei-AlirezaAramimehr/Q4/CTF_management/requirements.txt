@@ -1,0 +1,5 @@
+celery==5.5.2
+Django==5.2.1
+djangorestframework==3.16.0
+docker_py==1.10.6
+redis==6.1.0
