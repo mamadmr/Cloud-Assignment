@@ -18,7 +18,7 @@
 5- Get <Key>                 Get name
 
 
-# ============================ Connect via localhost ============================
+# ============== Connect via localhost ==============
 
 
 # Install redis-cli
@@ -33,7 +33,7 @@
 3- Get name     # We except to see 'admin'
 
 
-# =============================== Connect via Lan ===============================
+# ============== Connect via Lan ==============
 
 
 1- Install redis-cli on my windows from this link 'https://github.com/tporadowski/redis/releases'
