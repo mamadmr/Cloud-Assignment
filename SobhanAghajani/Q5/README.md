@@ -14,5 +14,10 @@ Docker Engine: Used by the API to launch challenge containers (e.g., Juice Shop 
 
 These services communicate over a shared Docker network defined in the docker-compose.yml.
 
+# Run Docker Compose
+```docker
+docker compose up --build
+```
+
 # Video link
 https://iutbox.iut.ac.ir/index.php/s/A3nB8LGK9HQrRtp
