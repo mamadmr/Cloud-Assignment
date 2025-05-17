@@ -34,6 +34,10 @@ POST /assign-container
 
 #### Database Schema (PostgreSQL)
 
+```bash
+psql -h localhost -U admin -d ctf_db
+```
+
 ```sql
 -- teams table
 CREATE TABLE teams (
@@ -68,7 +72,7 @@ INSERT INTO teams (name) VALUES
 
 -- Inserting sample challenges
 INSERT INTO challenges (id, image_name) VALUES 
-('nginx','nginx:latest')
+('nginx','nginx:latest'),
 ('juice-shop', 'bkimminich/juice-shop'),
 ('dvwa', 'vulnerables/web-dvwa'),
 ('metasploitable', 'tleemcjr/metasploitable2'),
@@ -138,10 +142,6 @@ celery -A tasks worker --loglevel=info
 ```bash
 export FLASK_APP=app.py
 flask run
-```
-
-```bash
-psql -h localhost -U admin -d ctf_db
 ```
 
 #### API

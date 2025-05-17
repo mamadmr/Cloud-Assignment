@@ -1,0 +1,47 @@
+# docker-compose.yml
+
+services:
+  web:
+    build: ./
+    container_name: ctf_api
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+    environment:
+      - FLASK_APP=app.py
+    networks:
+      - ctf_net
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - ctf_net
+
+  db:
+    image: postgres:latest
+    container_name: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+    environment:
+      POSTGRES_DB: ctf_db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: dani
+    ports:
+      - "5432:5432"
+    networks:
+      - ctf_net
+
+networks:
+  ctf_net:
+
+
+volumes:
+  postgres_data:
