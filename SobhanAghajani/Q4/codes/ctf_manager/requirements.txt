@@ -1,8 +1,0 @@
-fastapi
-uvicorn
-sqlalchemy
-pydantic
-celery
-redis
-docker
-psycopg2-binary
