@@ -1,13 +1,12 @@
 from flask import Flask, request, jsonify
 from tasks import start_container, stop_container
-from celery_app import celery
 import psycopg2
 import psycopg2.extras
 
 app = Flask(__name__)
 
 # Database connection settings (adjust as needed)
-DB_HOST = "db"
+DB_HOST = "postgres"
 DB_PORT = "5432"
 DB_NAME = "ctf_db"
 DB_USER = "admin"
@@ -104,3 +103,12 @@ def remove_container():
             conn.commit()
 
     return jsonify({"message": "Remove task submitted"}), 202
+
+
+@app.route("/active-containers", methods=["GET"])
+def active_containers():
+    with get_db_conn() as conn:
+        with conn.cursor() as cur:
+            cur.execute("SELECT * FROM team_challenges WHERE container_id IS NOT NULL")
+            rows = cur.fetchall()
+            return jsonify(rows), 200

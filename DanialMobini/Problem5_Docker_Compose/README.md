@@ -1,63 +1,76 @@
 # Docker Compose System Explanation
 
-This docker-compose.yml defines a system with four interconnected services:
+## (2) System Explanation and Usage Guide
 
-## Services and Connections
+### Service Architecture
 
-1. **web** (CTF API):
-   - Flask application running on port 8000
-   - Connects to:
-     - PostgreSQL database (`db`) using `DATABASE_URL`
-     - Redis (`redis`) using `CELERY_BROKER_URL`
-   - Has access to Docker socket (for container management)
+1. **PostgreSQL**: The primary database storing:
+   - Challenge information (in `challenges` table)
+   - Team-container assignments (in `team_challenges` table)
 
-2. **celery** (Worker):
-   - Celery worker processing tasks from the "containers" queue
-   - Shares the same codebase as web (same build)
-   - Connects to same Redis and PostgreSQL as web
+2. **Redis**: Message broker for Celery tasks:
+   - Handles asynchronous container operations
+   - Stores task results temporarily
 
-3. **redis**:
-   - Message broker for Celery (task queue)
-   - Exposes port 6379
+3. **Web Service (Flask)**: The main API that:
+   - Exposes REST endpoints for container management
+   - Communicates with PostgreSQL for data
+   - Queues tasks to Celery via Redis
 
-4. **db** (PostgreSQL):
-   - Database server with preconfigured database "ctfdb"
-   - Credentials: admin/dani
-   - Exposes port 5432
+4. **Celery Worker**: Handles background tasks:
+   - Starts challenge containers using Docker API
+   - Stops and removes containers when requested
 
-## How to Start and Use the System
+### Service Connections
 
-1. **Starting the system**:
-
-```bash
-docker-compose up -d
+```
+[Postman/Client] → [Web Service (Flask)]
+                    │
+                    ├──→ [PostgreSQL] (for data storage)
+                    │
+                    └──→ [Redis] → [Celery] → [Docker Engine]
 ```
 
-2. **Accessing services**:
-   - Web API: `http://localhost:8000`
-   - PostgreSQL: `localhost:5432` (user: admin, password: dani, db: ctfdb)
-   - Redis: `localhost:6379`
+#### API Endpoints
 
-3. **System workflow**:
-   - The web service (Flask) handles HTTP requests
-   - Long-running tasks can be offloaded to Celery via Redis
-   - Celery workers process tasks from the "containers" queue
-   - Both web and celery services persist data to PostgreSQL
+1. **Assign a Container**:
 
-4. **Stopping the system**:
+```
+POST http://localhost:5000/assign-container
+Content-Type: application/json
 
-```bash
-docker-compose down
+{
+   "team_id": "1",
+   "challenge_id": "1"
+}
+```
+
+2. **Remove a Container**:
+
+```
+DELETE http://localhost:5000/remove-container
+Content-Type: application/json
+
+{
+   "team_id": "1",
+   "challenge_id": "1"
+}
+```
+
+3. **List Active Containers**:
+
+```
+GET http://localhost:5000/active-containers
 ```
 
 **Assign a container:**
 
 ```bash
-curl -X POST http://localhost:8000/assign-container \
+curl -X POST http://localhost:5000/assign-container \
      -H "Content-Type: application/json" \
      -d '{"team_id": 1, "challenge_id": "juice-shop"}'
 
-curl -X POST http://localhost:8000/assign-container \
+curl -X POST http://localhost:5000/assign-container \
      -H "Content-Type: application/json" \
      -d '{"team_id": 2, "challenge_id": "nginx"}'
 ```
@@ -65,11 +78,11 @@ curl -X POST http://localhost:8000/assign-container \
 **Remove a container:**
 
 ```bash
-curl -X DELETE http://localhost:8000/remove-container \
+curl -X DELETE http://localhost:5000/remove-container \
      -H "Content-Type: application/json" \
      -d '{"team_id": 1, "challenge_id": "juice-shop"}'
 
-curl -X DELETE http://localhost:8000/remove-container \
+curl -X DELETE http://localhost:5000/remove-container \
      -H "Content-Type: application/json" \
      -d '{"team_id": 2, "challenge_id": "nginx"}'
 ```

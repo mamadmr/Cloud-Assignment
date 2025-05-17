@@ -1,47 +1,69 @@
-# docker-compose.yml
+version: '3.8'
 
 services:
-  web:
-    build: ./
-    container_name: ctf_api
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    ports:
-      - "8000:8000"
-    depends_on:
-      - db
-      - redis
-    environment:
-      - FLASK_APP=app.py
-    networks:
-      - ctf_net
-
-  redis:
-    image: redis:latest
-    container_name: redis
-    ports:
-      - "6379:6379"
-    networks:
-      - ctf_net
-
-  db:
+  postgres:
     image: postgres:latest
-    container_name: postgres
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    restart: always
     environment:
       POSTGRES_DB: ctf_db
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: dani
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     networks:
-      - ctf_net
+      - ctf_network
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    networks:
+      - ctf_network
+
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      HOST_IP: localhost
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: ctf_db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: dani
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - ctf_network
+    volumes:
+      - ./app:/app
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  celery:
+    build: .
+    command: celery -A tasks worker --loglevel=info
+    environment:
+      HOST_IP: localhost
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: ctf_db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: dani
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      - postgres
+      - redis
+      - web
+    networks:
+      - ctf_network
+    volumes:
+      - ./app:/app
+      - /var/run/docker.sock:/var/run/docker.sock
 
 networks:
-  ctf_net:
-
+  ctf_network:
+    driver: bridge
 
 volumes:
   postgres_data:
