@@ -81,7 +81,7 @@ DATABASES = {
         'NAME': 'ctfdb',       
         'USER': 'ctf_admin',   
         'PASSWORD': 'ctf_admin',   
-        'HOST': 'localhost',       
+        'HOST': 'my-postgres',       
         'PORT': '5432',
     }
 }

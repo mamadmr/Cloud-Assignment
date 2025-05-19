@@ -1,10 +1,12 @@
 import docker
-from utils import app
+from .utils import app
 
-client = docker.from_env()
+client = client = docker.DockerClient.from_env()
 
 @app.task
 def start_ctf_container(image_name, container_name=None, ports=None):
+
+    
     container = client.containers.run(
         image=image_name,
         name=container_name,

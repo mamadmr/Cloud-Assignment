@@ -63,7 +63,7 @@ Content-Type: application/json
 {
     "user": "Team3",
     "image_name": "bkimminich/juice-shop",
-    "container_name": "Q1",
+    "container_name": "Q2",
     "port": "9898"
 }
 
