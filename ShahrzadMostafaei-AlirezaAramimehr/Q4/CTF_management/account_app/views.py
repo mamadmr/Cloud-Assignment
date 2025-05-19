@@ -8,15 +8,13 @@ from account_app.models import Container
 
 from redis import Redis
 
-redis_client = Redis(host='localhost',port=6379,db=0)
+redis_client = Redis(host='my-redis',port=6379,db=0)
 
 class StartContainerAPIView(APIView):
     def post(self, request):
         serializer = ContainerSerializer(data=request.data)
         try:
             if serializer.is_valid(raise_exception=True):
-                serializer.save()
-
                 
                 validated_data = serializer.validated_data
                 user = validated_data['user']  
@@ -24,14 +22,14 @@ class StartContainerAPIView(APIView):
                 container_name = validated_data['container_name'] +'-ID-'+str(user.pk)
                 ports = {}
 
-                task = app.send_task('tasks.start_ctf_container', args=[image_name, container_name, ports])
+                task = app.send_task('account_app.tasks.start_ctf_container', args=[image_name, container_name, ports])
                 container_id = task.get()["container_id"]
                 container_id_key = 'container_id_' + str(user.pk)
                 redis_client.set(container_id_key, container_id)
+                serializer.save()
                 return Response({"message": "Container starting", "task_id": task.id, "Container_id":container_id}, status=status.HTTP_202_ACCEPTED)
-        except:
-
-            return Response({"error": "This Team already has a up container"}, status=status.HTTP_409_CONFLICT)
+        except Exception as e:
+            return Response({"error": "You can not access more than one question "}, status=status.HTTP_409_CONFLICT)
 
 class StopContainerAPIView(APIView):
     def post(self, request):
@@ -49,7 +47,7 @@ class StopContainerAPIView(APIView):
             if not container_id:
                 return Response({"error": "container_id is required"}, status=status.HTTP_400_BAD_REQUEST)
 
-            task = app.send_task('tasks.stop_ctf_container', args=[container_id])
+            task = app.send_task('account_app.tasks.stop_ctf_container', args=[container_id])
             return Response({"message": "Container Stopping", "task_id": task.id, "Container_id":container_id}, status=status.HTTP_202_ACCEPTED)
 
 
@@ -77,6 +75,6 @@ class RemoveConatinerAPIView(APIView):
             if not container_id:
                 return Response({"error": "container_id is required"}, status=status.HTTP_400_BAD_REQUEST)
 
-            task = app.send_task('tasks.remove_ctf_container', args=[container_id])
+            task = app.send_task('account_app.tasks.remove_ctf_container', args=[container_id])
             return Response({"message": "Container Removing", "task_id": task.id, "Container_id":container_id}, status=status.HTTP_202_ACCEPTED)
         
