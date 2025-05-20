@@ -1,0 +1,6 @@
+Flask
+SQLAlchemy
+psycopg2-binary
+docker
+celery
+redis
