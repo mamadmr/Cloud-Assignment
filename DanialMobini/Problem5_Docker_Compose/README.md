@@ -24,7 +24,7 @@
 ### Service Connections
 
 ```
-[Postman/Client] → [Web Service (Flask)]
+[Curl/Client] → [Web Service (Flask)]
                     │
                     ├──→ [PostgreSQL] (for data storage)
                     │
