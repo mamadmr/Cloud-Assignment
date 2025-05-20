@@ -1,4 +1,4 @@
-# Docker Compose System Explanation
+# Docker Compose Integration
 
 ## (2) System Explanation and Usage Guide
 
@@ -35,26 +35,26 @@
 
 1. **Assign a Container**:
 
-```
-POST http://localhost:5000/assign-container
-Content-Type: application/json
+```bash
+curl -X POST http://localhost:5000/assign-container \
+     -H "Content-Type: application/json" \
+     -d '{"team_id": 1, "challenge_id": "juice-shop"}'
 
-{
-   "team_id": "1",
-   "challenge_id": "1"
-}
+curl -X POST http://localhost:5000/assign-container \
+     -H "Content-Type: application/json" \
+     -d '{"team_id": 2, "challenge_id": "nginx"}'
 ```
 
 2. **Remove a Container**:
 
-```
-DELETE http://localhost:5000/remove-container
-Content-Type: application/json
+```bash
+curl -X DELETE http://localhost:5000/remove-container \
+     -H "Content-Type: application/json" \
+     -d '{"team_id": 1, "challenge_id": "juice-shop"}'
 
-{
-   "team_id": "1",
-   "challenge_id": "1"
-}
+curl -X DELETE http://localhost:5000/remove-container \
+     -H "Content-Type: application/json" \
+     -d '{"team_id": 2, "challenge_id": "nginx"}'
 ```
 
 3. **List Active Containers**:
@@ -63,26 +63,6 @@ Content-Type: application/json
 GET http://localhost:5000/active-containers
 ```
 
-**Assign a container:**
+## Video
 
-```bash
-curl -X POST http://localhost:5000/assign-container \
-     -H "Content-Type: application/json" \
-     -d '{"team_id": 1, "challenge_id": "juice-shop"}'
-
-curl -X POST http://localhost:5000/assign-container \
-     -H "Content-Type: application/json" \
-     -d '{"team_id": 2, "challenge_id": "nginx"}'
-```
-
-**Remove a container:**
-
-```bash
-curl -X DELETE http://localhost:5000/remove-container \
-     -H "Content-Type: application/json" \
-     -d '{"team_id": 1, "challenge_id": "juice-shop"}'
-
-curl -X DELETE http://localhost:5000/remove-container \
-     -H "Content-Type: application/json" \
-     -d '{"team_id": 2, "challenge_id": "nginx"}'
-```
+[Video](https://iutbox.iut.ac.ir/index.php/s/tb77Gk47WfzKpWk)
