@@ -8,7 +8,7 @@ This module defines Django REST Framework API views for managing CTF challenge D
 
 ### `AssignChallenge`
 
-- **Endpoint:** POST `/assign-challenge/`  
+- **Endpoint:** POST `api/assign/`  
 - **Purpose:**  
   Assigns a challenge to a team by starting a Docker container for that challenge (if not already running).  
 - **Process:**  
@@ -21,7 +21,7 @@ This module defines Django REST Framework API views for managing CTF challenge D
 
 ### `RemoveChallenge`
 
-- **Endpoint:** POST `/remove-challenge/`  
+- **Endpoint:** POST `api/remove/`  
 - **Purpose:**  
   Stops and removes a Docker container assigned to a team for a challenge by enqueuing a Celery task.  
 - **Process:**  
@@ -33,7 +33,7 @@ This module defines Django REST Framework API views for managing CTF challenge D
 
 ### `ActiveContainerInfo`
 
-- **Endpoint:** GET `/active-container-info/`  
+- **Endpoint:** GET `api/container-info/`  
 - **Purpose:**  
   Returns information about an active Docker container for a team and challenge.  
 - **Process:**  
