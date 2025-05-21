@@ -1,17 +1,17 @@
-# 🚩 CTF Challenge Management Web API
+# CTF Challenge Management Web API
 
 A Django-based web API to manage CTF challenge containers for multiple teams. Integrates Docker, Celery (with Redis), and a database backend for scalable and asynchronous challenge lifecycle control.
 
 ---
 
-## 📚 Table of Contents
-- [🔗 Purpose of Endpoints](#-purpose-of-endpoints)
-- [🗃️ Database Schema](#️-database-schema)
-- [⚙️ Celery and Redis Configuration](#️-celery-and-redis-configuration)
-- [🔧 Key Code Components](#-key-code-components)
-- [🐳 Dockerfile Overview](#-dockerfile-overview)
-- [🚀 Setup & Run Instructions](#-setup--run-instructions)
-- [📺 Video Demonstration](#-video-demonstration)
+## 📘 Table of Contents
+- [Purpose of Endpoints](#purpose-of-endpoints)
+- [Database Schema](#database-schema)
+- [Celery and Redis Configuration](#celery-and-redis-configuration)
+- [Key Code Components](#key-code-components)
+- [Dockerfile Overview](#dockerfile-overview)
+- [Setup & Run Instructions](#setup--run-instructions)
+- [Video Demonstration](#video-demonstration)
 
 ---
 
@@ -27,14 +27,15 @@ A Django-based web API to manage CTF challenge containers for multiple teams. In
 
 ## 🗃️ Database Schema
 
-- **Team**: `id`, `name`, ...
-- **Challenge**: `id`, `challenge_id`, `image` (e.g., `bkimminich/juice-shop`)
+- **Team**: `id`,`team_id`,`name`
+- **Challenge**: `id`, `challenge_id`,`name`,`image` (e.g., `bkimminich/juice-shop`)
 - **Container**:
   - `id`
   - `team_id` → foreign key
   - `challenge_id` → foreign key
   - `container_id` → Docker container ID
   - `address` → e.g., `http://172.18.0.5:3000`
+  - `created_at`
 
 ---
 
@@ -50,12 +51,12 @@ A Django-based web API to manage CTF challenge containers for multiple teams. In
 
 ---
 
-## 🔧 Key Code Components
+## 🧩 Key Code Components
 
 <details>
 <summary><strong>Celery Tasks (challenges/tasks.py)</strong></summary>
 
-### ✅ `start_container_task(team_id, challenge_id)`
+### ✅ start_container_task(team_id, challenge_id)
 
 - Connects to Docker using:
   ```python
@@ -71,7 +72,7 @@ A Django-based web API to manage CTF challenge containers for multiple teams. In
   }
   ```
 
-### 🛑 `stop_container_task(container_id)`
+### 🛑 stop_container_task(container_id)
 
 - Stops and removes the container.
 - Deletes DB entry for the container.
@@ -96,12 +97,12 @@ COPY . .
 
 ## 🚀 Setup & Run Instructions
 
-### ✅ Prerequisites
+### Prerequisites
 - Docker installed
 - Python 3.9
 - Postman or curl
 
-### 🔨 Step-by-Step
+### Step-by-Step
 
 ```bash
 # 1. Build API image
@@ -127,7 +128,7 @@ docker ps
 
 ## 📬 API Testing via Postman
 
-### 📌 Assign a container
+### Assign a container
 ```json
 POST /api/assign/
 {
@@ -136,7 +137,7 @@ POST /api/assign/
 }
 ```
 
-### 📌 Remove a container
+### Remove a container
 ```json
 DELETE /api/remove/
 {
@@ -145,30 +146,28 @@ DELETE /api/remove/
 }
 ```
 
-### 📌 List all containers
+### List all containers
 ```
 GET /api/list/
 ```
 
 ---
 
-## 📺 Video Demonstration
+## 🎥 Video Demonstration
 
-- [x] API interaction via Postman
-- [x] Containers starting/stopping in `docker ps`
-- [x] Celery logs showing task execution
-- [x] Database records updating
+📎 [Click here to view the video](https://iutbox.iut.ac.ir/)
 
-👉 **video link**
+> Shows:
+>
+> * API interaction via Postman
+> * Containers starting/stopping in `docker ps`
+> * Celery logs showing task execution
+> * Database records updating
 
 ---
 
-## 📝 Notes
+## Notes
 
 - Ensure the Docker socket `//var/run/docker.sock` is accessible.
 - Use Django Admin or fixtures to preload team/challenge data.
 - Adjust container ports or images as per your actual challenge setup.
-
----
-
-**Built with** **Django**, 🐳 **Docker**, ⚙️ **Celery**, and 🧠 **Redis**
