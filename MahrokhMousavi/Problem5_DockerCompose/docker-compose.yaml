@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=ctf_user
+      - POSTGRES_PASSWORD=ctf_password
+      - POSTGRES_DB=ctf_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - ctf_network
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    networks:
+      - ctf_network
+
+  web:
+    build: .
+    command: gunicorn --bind 0.0.0.0:8000 ctf_api.wsgi:application
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DJANGO_SETTINGS_MODULE=ctf_api.settings
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - ctf_network
+
+  celery:
+    build: .
+    command: celery -A ctf_api worker --loglevel=info
+    volumes:
+      - .:/app
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DJANGO_SETTINGS_MODULE=ctf_api.settings
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - ctf_network
+
+  challenge_todo:
+    image: jetty:9.4-jre11-slim
+    ports:
+      - "14480:8080"
+    networks:
+      - ctf_network
+    deploy:
+      replicas: 0  # Start with no instances, managed by the API
+
+  challenge_juice:
+    image: bkimminich/juice-shop
+    ports:
+      - "14528:3000"
+    networks:
+      - ctf_network
+    deploy:
+      replicas: 0  # Start with no instances, managed by the API
+
+networks:
+  ctf_network:
+    driver: bridge
+
+volumes:
+  pgdata:
