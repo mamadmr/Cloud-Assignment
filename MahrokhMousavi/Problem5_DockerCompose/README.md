@@ -144,44 +144,39 @@ sequenceDiagram
 4. **Status updates** flow back through the chain
 
 ---
+## 🚀 System Initialization and Operation
 
-## 🚀 Quick Start
+### Prerequisites
+- Docker
+- Docker Compose
+- Postman
 
-```bash
-# Start services
-docker-compose up --build
+### Step-by-Step
+1. Place `docker-compose.yml` in your directory.
+2. Run: `docker-compose up --build`
+3. Apply migrations: `docker exec ctf_web_1 python manage.py makemigrations` and `migrate`
+4. Add data:
+   ```bash
+   docker exec -it ctf_web_1 python manage.py shell
+   ```
+   ```python
+   from challenges.models import Team, Challenge
+   Team.objects.create(team_id="team1", name="Team1")
+   Team.objects.create(team_id="team2", name="Team2")
+   Challenge.objects.create(challenge_id="todo", name="Todo App", image="jetty:9.4-jre11-slim", port=8080)
+   Challenge.objects.create(challenge_id="juice", name="Juice Shop", image="bkimminich/juice-shop", port=3000)
+   exit()
+   ```
+5. Check containers: `docker ps`
+6. Test API with Postman.
 
-# Apply migrations
-docker-compose exec web python manage.py migrate
+### API Testing via Postman
+- **Assign**:
+  - Team2 - Juice Shop: `POST /api/assign/ { "team_id": "team2", "challenge_id": "juice" }`
+  - Team1 - Todo App: `POST /api/assign/ { "team_id": "team1", "challenge_id": "todo" }`
+- **Remove**: `DELETE /api/remove/ { "team_id": "team2", "challenge_id": "juice" }`
+- **List**: `GET /api/list/`
 
-# Create test team (in Django shell)
-docker-compose exec web python manage.py shell
->>> from challenges.models import Team
->>> Team.objects.create(team_id="team1", name="Alpha Team")
-```
-
----
-
-## 📡 API Examples
-
-### Assign Challenge
-```bash
-curl -X POST http://localhost:8000/api/assign/ \
-  -d '{"team_id": "team1", "challenge_id": "todo"}' \
-  -H "Content-Type: application/json"
-```
-
-### List Active Containers
-```bash
-curl http://localhost:8000/api/list/
-```
-
-### Remove Challenge
-```bash
-curl -X DELETE http://localhost:8000/api/remove/ \
-  -d '{"team_id": "team1", "challenge_id": "todo"}' \
-  -H "Content-Type: application/json"
-```
 ---
 
 ## 🎥 Video Demonstration
