@@ -185,7 +185,7 @@ docker ps -a
 
 📎 [Click here to view the video](https://iutbox.iut.ac.ir/index.php/s/3HYYwb4TWyjwxTc)
 
-> Should show:
+> Shows:
 >
 > * Running `main.py`
 > * Celery logs
