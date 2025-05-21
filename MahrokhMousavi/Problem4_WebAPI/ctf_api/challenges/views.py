@@ -1,6 +1,7 @@
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.db import transaction
 from .models import Team, Challenge, Container
 from .serializers import ContainerSerializer
 from .tasks import start_container_task, stop_container_task
@@ -18,9 +19,15 @@ class AssignContainer(APIView):
                     {"error": "Container already assigned"},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
-            task = start_container_task.delay(team.id, challenge.id)
+            # Use transaction.on_commit to ensure task runs after database transaction commits
+            transaction.on_commit(
+                lambda: start_container_task.delay(team_id, challenge_id)
+            )
             return Response(
-                {"task_id": task.id, "message": "Container assignment in progress"},
+                {
+                    "task_id": "task-scheduled",
+                    "message": "Container assignment in progress",
+                },
                 status=status.HTTP_202_ACCEPTED,
             )
         except (Team.DoesNotExist, Challenge.DoesNotExist):
@@ -38,7 +45,7 @@ class RemoveContainer(APIView):
             team = Team.objects.get(team_id=team_id)
             challenge = Challenge.objects.get(challenge_id=challenge_id)
             container = Container.objects.get(team=team, challenge=challenge)
-            stop_container_task.delay(container.id)
+            transaction.on_commit(lambda: stop_container_task.delay(container.id))
             return Response(
                 {
                     "message": "Container removal in progress",

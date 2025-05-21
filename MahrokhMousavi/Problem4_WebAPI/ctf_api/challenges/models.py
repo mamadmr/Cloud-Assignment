@@ -12,9 +12,8 @@ class Team(models.Model):
 class Challenge(models.Model):
     challenge_id = models.CharField(max_length=50, unique=True)
     name = models.CharField(max_length=100)
-    image = models.CharField(
-        max_length=200
-    )  # Docker image, e.g., pasapples/apjctf-todo-java-app:latest
+    image = models.CharField(max_length=200)
+    port = models.IntegerField(default=8080)
 
     def __str__(self):
         return self.name

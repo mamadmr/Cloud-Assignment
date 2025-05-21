@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -78,11 +79,11 @@ WSGI_APPLICATION = "ctf_api.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "ctf_db",
-        "USER": "ctf_user",
-        "PASSWORD": "ctf_password",
-        "HOST": "postgres",
-        "PORT": "5432",
+        "NAME": os.getenv("POSTGRES_DB", "ctf_db"),
+        "USER": os.getenv("POSTGRES_USER", "ctf_user"),
+        "PASSWORD": os.getenv("POSTGRES_PASSWORD", "ctf_password"),
+        "HOST": os.getenv("POSTGRES_HOST", "postgres"),  # Important - use service name
+        "PORT": os.getenv("POSTGRES_PORT", "5432"),
     }
 }
 
@@ -128,8 +129,8 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-CELERY_BROKER_URL = "redis://172.18.0.3:6379/0"
-CELERY_RESULT_BACKEND = "redis://172.18.0.3:6379/0"
+CELERY_BROKER_URL = "redis://redis:6379/0"
+CELERY_RESULT_BACKEND = "redis://redis:6379/0"
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
