@@ -44,8 +44,8 @@ A Django-based web API to manage CTF challenge containers for multiple teams. In
 
 - **Celery** uses:
   ```python
-  broker = "redis://redis:6379/0"
-  result_backend = "redis://redis:6379/0"
+  broker = "redis://172.18.0.3:6379/0"
+  result_backend = "redis://172.18.0.3:6379/0"
   ```
 
 - **Redis** is a lightweight message broker for asynchronous task queuing.
@@ -111,33 +111,37 @@ COPY . .
 docker build -t ctf_api .
 
 # 2. Start PostgreSQL
-docker run -d --name postgres `
-  -e POSTGRES_USER=ctf_user `
-  -e POSTGRES_PASSWORD=ctf_password `
-  -e POSTGRES_DB=ctf_db `
-  -p 5432:5432 `
-  --network ctf_network `
+docker run -d --name postgres \
+  -e POSTGRES_USER=admin \
+  -e POSTGRES_PASSWORD=password \
+  -e POSTGRES_DB=ctf_db \
+  -p 5432:5432 \
+  --network ctf_network \
   postgres
 
 # 3. Start Redis
 docker run -d --name redis -p 6379:6379 --network ctf_network redis
 
 # 4. Start API server
-docker run -d --name ctf_api `
-  -p 8000:8000 `
-  --network ctf_network `
-  -e DJANGO_SETTINGS_MODULE=ctf_api.settings `
+docker run -d --name ctf_api \
+  -p 8000:8000 \
+  --network ctf_network \
+  -e DJANGO_SETTINGS_MODULE=ctf_api.settings \
   ctf_api
 
-# 5. Start Celery worker
-docker run -d --name ctf_celery `
-  -v //var/run/docker.sock:/var/run/docker.sock `
-  --network ctf_network `
-  -e DJANGO_SETTINGS_MODULE=ctf_api.settings `
-  ctf_api `
+# 5. Apply database migrations
+docker exec ctf_api python manage.py makemigrations
+docker exec ctf_api python manage.py migrate
+
+# 6. Start Celery worker
+docker run -d --name ctf_celery \
+  -v //var/run/docker.sock:/var/run/docker.sock \
+  --network ctf_network \
+  -e DJANGO_SETTINGS_MODULE=ctf_api.settings \
+  ctf_api \
   celery -A ctf_api worker --loglevel=info
 
-# 6. Verify running containers
+# 7. Verify running containers
 docker ps
 ```
 
