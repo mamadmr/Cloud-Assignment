@@ -1,15 +1,6 @@
 
 # CTF Challenge Management Web API - Docker Compose Integration
 
-## 📘 Table of Contents
-- [Docker Compose Setup](#docker-compose-setup)
-- [Core Components](#core-components)
-- [System Workflow](#-system-workflow) 
-- [Quick Start](#-quick-start)
-- [API Examples](#-api-examples)
-
----
-
 ## 🐳 Docker Compose Setup
 
 ```yaml
