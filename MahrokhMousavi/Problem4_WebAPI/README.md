@@ -214,7 +214,7 @@ GET /api/list/
 
 ## 🎥 Video Demonstration
 
-📎 [Click here to view the video](https://iutbox.iut.ac.ir/)
+📎 [Click here to view the video](https://iutbox.iut.ac.ir/index.php/s/PFBYPTZ7rTNgeGC)
 
 > Shows:
 >
