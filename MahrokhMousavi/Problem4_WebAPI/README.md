@@ -44,8 +44,8 @@ A Django-based web API to manage CTF challenge containers for multiple teams. In
 
 - **Celery** uses:
   ```python
-  broker = "redis://172.18.0.3:6379/0"
-  result_backend = "redis://172.18.0.3:6379/0"
+  broker = "redis://redis:6379/0"
+  result_backend = "redis://redis:6379/0"
   ```
 
 - **Redis** is a lightweight message broker for asynchronous task queuing.
