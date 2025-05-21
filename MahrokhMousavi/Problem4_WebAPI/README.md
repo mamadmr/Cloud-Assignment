@@ -111,30 +111,30 @@ COPY . .
 docker build -t ctf_api .
 
 # 2. Start PostgreSQL
-docker run -d --name postgres \
-  -e POSTGRES_USER=admin \
-  -e POSTGRES_PASSWORD=password \
-  -e POSTGRES_DB=ctf_db \
-  -p 5432:5432 \
-  --network ctf_network \
+docker run -d --name postgres `
+  -e POSTGRES_USER=admin `
+  -e POSTGRES_PASSWORD=password `
+  -e POSTGRES_DB=ctf_db `
+  -p 5432:5432 `
+  --network ctf_network `
   postgres
 
 # 3. Start Redis
 docker run -d --name redis -p 6379:6379 --network ctf_network redis
 
 # 4. Start API server
-docker run -d --name ctf_api \
-  -p 8000:8000 \
-  --network ctf_network \
-  -e DJANGO_SETTINGS_MODULE=ctf_api.settings \
+docker run -d --name ctf_api `
+  -p 8000:8000 `
+  --network ctf_network `
+  -e DJANGO_SETTINGS_MODULE=ctf_api.settings `
   ctf_api
 
 # 5. Start Celery worker
-docker run -d --name ctf_celery \
-  -v //var/run/docker.sock:/var/run/docker.sock \
-  --network ctf_network \
-  -e DJANGO_SETTINGS_MODULE=ctf_api.settings \
-  ctf_api \
+docker run -d --name ctf_celery `
+  -v //var/run/docker.sock:/var/run/docker.sock `
+  --network ctf_network `
+  -e DJANGO_SETTINGS_MODULE=ctf_api.settings `
+  ctf_api `
   celery -A ctf_api worker --loglevel=info
 
 # 6. Verify running containers
