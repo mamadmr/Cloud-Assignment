@@ -1,15 +1,6 @@
 
 # CTF Challenge Management Web API - Docker Compose Integration
 
-## 📘 Table of Contents
-- [Docker Compose Setup](#docker-compose-setup)
-- [Core Components](#core-components)
-- [System Workflow](#-system-workflow) 
-- [Quick Start](#-quick-start)
-- [API Examples](#-api-examples)
-
----
-
 ## 🐳 Docker Compose Setup
 
 ```yaml
@@ -22,39 +13,70 @@ services:
       - POSTGRES_USER=ctf_user
       - POSTGRES_PASSWORD=ctf_password
       - POSTGRES_DB=ctf_db
+    ports:
+      - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - ctf_network
 
   redis:
     image: redis:latest
+    ports:
+      - "6379:6379"
+    networks:
+      - ctf_network
 
   web:
     build: .
     command: gunicorn --bind 0.0.0.0:8000 ctf_api.wsgi:application
+    volumes:
+      - .:/app
     ports:
       - "8000:8000"
+    environment:
+      - DJANGO_SETTINGS_MODULE=ctf_api.settings
     depends_on:
       - postgres
       - redis
+    networks:
+      - ctf_network
 
   celery:
     build: .
     command: celery -A ctf_api worker --loglevel=info
     volumes:
+      - .:/app
       - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DJANGO_SETTINGS_MODULE=ctf_api.settings
     depends_on:
       - postgres
       - redis
+    networks:
+      - ctf_network
 
   challenge_todo:
     image: jetty:9.4-jre11-slim
-    ports: ["14480:8080"]
-    deploy: { replicas: 0 }
+    ports:
+      - "14480:8080"
+    networks:
+      - ctf_network
+    deploy:
+      replicas: 0  # Managed by API
 
   challenge_juice:
     image: bkimminich/juice-shop
-    ports: ["14528:3000"]
-    deploy: { replicas: 0 }
+    ports:
+      - "14528:3000"
+    networks:
+      - ctf_network
+    deploy:
+      replicas: 0  # Managed by API
+
+networks:
+  ctf_network:
+    driver: bridge
 
 volumes:
   pgdata:
@@ -113,44 +135,39 @@ sequenceDiagram
 4. **Status updates** flow back through the chain
 
 ---
+## 🚀 System Initialization and Operation
 
-## 🚀 Quick Start
+### Prerequisites
+- Docker
+- Docker Compose
+- Postman
 
-```bash
-# Start services
-docker-compose up --build
+### Step-by-Step
+1. Place `docker-compose.yml` in your directory.
+2. Run: `docker-compose up --build`
+3. Apply migrations: `docker exec ctf_web_1 python manage.py makemigrations` and `migrate`
+4. Add data:
+   ```bash
+   docker exec -it ctf_web_1 python manage.py shell
+   ```
+   ```python
+   from challenges.models import Team, Challenge
+   Team.objects.create(team_id="team1", name="Team1")
+   Team.objects.create(team_id="team2", name="Team2")
+   Challenge.objects.create(challenge_id="todo", name="Todo App", image="jetty:9.4-jre11-slim", port=8080)
+   Challenge.objects.create(challenge_id="juice", name="Juice Shop", image="bkimminich/juice-shop", port=3000)
+   exit()
+   ```
+5. Check containers: `docker ps`
+6. Test API with Postman.
 
-# Apply migrations
-docker-compose exec web python manage.py migrate
+### API Testing via Postman
+- **Assign**:
+  - Team2 - Juice Shop: `POST /api/assign/ { "team_id": "team2", "challenge_id": "juice" }`
+  - Team1 - Todo App: `POST /api/assign/ { "team_id": "team1", "challenge_id": "todo" }`
+- **Remove**: `DELETE /api/remove/ { "team_id": "team2", "challenge_id": "juice" }`
+- **List**: `GET /api/list/`
 
-# Create test team (in Django shell)
-docker-compose exec web python manage.py shell
->>> from challenges.models import Team
->>> Team.objects.create(team_id="team1", name="Alpha Team")
-```
-
----
-
-## 📡 API Examples
-
-### Assign Challenge
-```bash
-curl -X POST http://localhost:8000/api/assign/ \
-  -d '{"team_id": "team1", "challenge_id": "todo"}' \
-  -H "Content-Type: application/json"
-```
-
-### List Active Containers
-```bash
-curl http://localhost:8000/api/list/
-```
-
-### Remove Challenge
-```bash
-curl -X DELETE http://localhost:8000/api/remove/ \
-  -d '{"team_id": "team1", "challenge_id": "todo"}' \
-  -H "Content-Type: application/json"
-```
 ---
 
 ## 🎥 Video Demonstration
