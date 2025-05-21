@@ -1,70 +1,174 @@
-# CTF Challenge Management Web API
+# 🚩 CTF Challenge Management Web API
 
-This project provides a web API for managing CTF challenge containers for different teams, integrating a database, Celery with Redis for asynchronous tasks, and Docker for container management.
+A Django-based web API to manage CTF challenge containers for multiple teams. Integrates Docker, Celery (with Redis), and a database backend for scalable and asynchronous challenge lifecycle control.
 
-## Purpose of Each Endpoint
+---
 
-- **POST /api/assign/**: Assigns a specific CTF container to a team based on provided `team_id` and `challenge_id`. Returns a task ID and confirmation message.
-- **DELETE /api/remove/**: Removes a CTF container from a team using the `team_id` and `challenge_id`. Returns a success message.
-- **GET /api/list/**: Lists all active container assignments for teams, showing container details.
+## 📚 Table of Contents
+- [🔗 Purpose of Endpoints](#-purpose-of-endpoints)
+- [🗃️ Database Schema](#️-database-schema)
+- [⚙️ Celery and Redis Configuration](#️-celery-and-redis-configuration)
+- [🔧 Key Code Components](#-key-code-components)
+- [🐳 Dockerfile Overview](#-dockerfile-overview)
+- [🚀 Setup & Run Instructions](#-setup--run-instructions)
+- [📺 Video Demonstration](#-video-demonstration)
 
-## Database Schema
+---
 
-- **Team**: Stores team information with fields including `id` (primary key) and other team details.
-- **Challenge**: Stores challenge information with fields including `id` (primary key) and `image` (Docker image name).
-- **Container**: Tracks active containers with fields including `id` (primary key), `team_id` (foreign key), `challenge_id` (foreign key), `container_id` (Docker container ID), and `address` (container access URL).
+## 🔗 Purpose of Endpoints
 
-## Celery and Redis Configuration
+| Endpoint            | Method | Description                                                                 |
+|---------------------|--------|-----------------------------------------------------------------------------|
+| `/api/assign/`      | POST   | Assign a CTF container to a team. Requires `team_id` and `challenge_id`.   |
+| `/api/remove/`      | DELETE | Remove a container assignment. Requires `team_id` and `challenge_id`.      |
+| `/api/list/`        | GET    | List all active container assignments with container access URLs.          |
 
-- **Celery**: Configured to handle asynchronous tasks for starting and stopping Docker containers, using Redis as the message broker and result backend.
-- **Redis**: Acts as the message broker for Celery, ensuring task queuing and result storage.
+---
 
-## Instructions to Set Up and Run the API
+## 🗃️ Database Schema
 
-### Prerequisites
-- Docker and Docker Desktop installed.
-- Python 3.9 environment.
-- Postman or similar API testing tool.
+- **Team**: `id`, `name`, ...
+- **Challenge**: `id`, `challenge_id`, `image` (e.g., `bkimminich/juice-shop`)
+- **Container**:
+  - `id`
+  - `team_id` → foreign key
+  - `challenge_id` → foreign key
+  - `container_id` → Docker container ID
+  - `address` → e.g., `http://172.18.0.5:3000`
 
-### Step-by-Step Setup
+---
 
-1. **Build the Docker Image**  
-   - Command: `docker build -t ctf_api .`  
-   - Purpose: Builds the API image with all dependencies, including Django, Celery, and required Python packages.
+## ⚙️ Celery and Redis Configuration
 
-2. **Start the Redis Service**  
-   - Command: `docker run -d --name redis -p 6379:6379 --network ctf_network redis`  
-   - Purpose: Launches the Redis container as the message broker, accessible on port 6379 and within the `ctf_network`.
+- **Celery** uses:
+  ```python
+  broker = "redis://172.18.0.3:6379/0"
+  result_backend = "redis://172.18.0.3:6379/0"
+  ```
 
-3. **Start the API Web Server**  
-   - Command: `docker run -d --name ctf_api -p 8000:8000 --network ctf_network <your_api_image>`  
-   - Purpose: Runs the Django API server, mapping port 8000 and connecting to the `ctf_network`. Replace `<your_api_image>` with the appropriate image name if different from `ctf_api`.
+- **Redis** is a lightweight message broker for asynchronous task queuing.
 
-4. **Run the Celery Worker**  
-   - Command: `docker run -d --name ctf_celery -v //var/run/docker.sock:/var/run/docker.sock --network ctf_network ctf_api celery -A ctf_api worker --loglevel=info`  
-   - Purpose: Launches the Celery worker container, mounting the Docker socket for container management and connecting to the `ctf_network` for Redis communication.
+---
 
-5. **Verify Services**  
-   - Command: `docker ps`  
-   - Purpose: Checks that all containers (API, Celery worker, Redis) are running.
+## 🔧 Key Code Components
 
-6. **Test the API with Postman**  
-   - **Assign Container**: Send a POST request to `http://localhost:8000/api/assign/` with JSON `{"team_id": "team2", "challenge_id": "juice"}`.
-   - **Remove Container**: Send a DELETE request to `http://localhost:8000/api/remove/` with JSON `{"team_id": "team2", "challenge_id": "juice"}`.
-   - **List Containers**: Send a GET request to `http://localhost:8000/api/list/`.
-   - Purpose: Confirms API functionality and container management.
+<details>
+<summary><strong>Celery Tasks (challenges/tasks.py)</strong></summary>
 
-7. **Check Logs**  
-   - Command: `docker logs ctf_celery`  
-   - Purpose: Reviews Celery worker logs to verify task execution.
+### ✅ `start_container_task(team_id, challenge_id)`
 
-8. **Stop Services**  
-   - Command: `docker stop ctf_celery ctf_api redis`  
-   - Purpose: Stops the running containers.
-   - Command: `docker rm ctf_celery ctf_api redis`  
-   - Purpose: Removes the stopped containers.
+- Connects to Docker using:
+  ```python
+  docker.DockerClient(base_url="unix:///var/run/docker.sock")
+  ```
+- Starts a container on `ctf_network`, dynamically assigns a port.
+- Saves container info to DB and returns:
+  ```json
+  {
+    "status": "success",
+    "container_id": "abc123",
+    "address": "http://172.18.0.5:3000"
+  }
+  ```
 
-### Notes
-- Ensure the Docker socket (`//var/run/docker.sock`) is accessible on your system (common in WSL2 with Docker Desktop).
-- Populate the database with initial team and challenge data via Django admin or migrations.
-- The API server command assumes a pre-built image; adjust the run command if your setup differs (e.g., includes a specific entrypoint).
+### 🛑 `stop_container_task(container_id)`
+
+- Stops and removes the container.
+- Deletes DB entry for the container.
+
+</details>
+
+---
+
+## 🐳 Dockerfile Overview
+
+```dockerfile
+FROM python:3.9-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
+```
+
+- No `CMD` specified to support flexible entrypoints: Django server or Celery worker.
+
+---
+
+## 🚀 Setup & Run Instructions
+
+### ✅ Prerequisites
+- Docker installed
+- Python 3.9
+- Postman or curl
+
+### 🔨 Step-by-Step
+
+```bash
+# 1. Build API image
+docker build -t ctf_api .
+
+# 2. Start Redis
+docker run -d --name redis -p 6379:6379 --network ctf_network redis
+
+# 3. Start API server
+docker run -d --name ctf_api -p 8000:8000 --network ctf_network ctf_api
+
+# 4. Start Celery worker
+docker run -d --name ctf_celery \
+  -v //var/run/docker.sock:/var/run/docker.sock \
+  --network ctf_network ctf_api \
+  celery -A ctf_api worker --loglevel=info
+
+# 5. Verify running containers
+docker ps
+```
+
+---
+
+## 📬 API Testing via Postman
+
+### 📌 Assign a container
+```json
+POST /api/assign/
+{
+  "team_id": "team2",
+  "challenge_id": "juice"
+}
+```
+
+### 📌 Remove a container
+```json
+DELETE /api/remove/
+{
+  "team_id": "team2",
+  "challenge_id": "juice"
+}
+```
+
+### 📌 List all containers
+```
+GET /api/list/
+```
+
+---
+
+## 📺 Video Demonstration
+
+- [x] API interaction via Postman
+- [x] Containers starting/stopping in `docker ps`
+- [x] Celery logs showing task execution
+- [x] Database records updating
+
+👉 **video link**
+
+---
+
+## 📝 Notes
+
+- Ensure the Docker socket `//var/run/docker.sock` is accessible.
+- Use Django Admin or fixtures to preload team/challenge data.
+- Adjust container ports or images as per your actual challenge setup.
+
+---
+
+**Built with** **Django**, 🐳 **Docker**, ⚙️ **Celery**, and 🧠 **Redis**
