@@ -229,4 +229,18 @@ This infrastructure provides a scalable and efficient environment for CTF compet
 
 ---
 
-*This documentation was generated as part of the Docker CTF assignment.*
+
+## Video Demonstration
+
+▶️ Watch the full system demonstration video here: [Demo Video](https://iutbox.iut.ac.ir/index.php/s/GPW57bQESMLs9A6)
+
+
+
+### This video covers:
+
+- Running the system with docker-compose
+
+- Assigning and removing challenges for multiple teams
+
+- Managing containers dynamically through Celery workers
+---
