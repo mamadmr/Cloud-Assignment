@@ -133,24 +133,24 @@ You can see all API endpoints and interact with them directly through the Swagge
 ### Create Challenge
 ```
 {
-  "challenge_id": "challenge2",
-  "name": "Ultimate Puzzle",
-  "image": "nginx",
-  "port": 8080
+  "challenge_id": "dvwa",
+  "name": "DVWA",
+  "image": "vulnerables/web-dvwa",
+  "port": 80
 }
 ```
 ### Assign Container
 ```
 {
   "team_id": "team2",
-  "challenge_id": "challenge2"
+  "challenge_id": "dvwa"
 }
 ```
 ### Remove Container
 ```
 {
   "team_id": "team2",
-  "challenge_id": "challenge2"
+  "challenge_id": "dvwa"
 }
 ```
 ### List Containers
