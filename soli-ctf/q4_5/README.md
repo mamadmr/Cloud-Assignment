@@ -73,8 +73,9 @@ A containerized microservice project using **FastAPI**, **Celery**, **PostgreSQL
 1. **Clone the repo**
 
    ```bash
-   git clone https://github.com/your-username/assignment-manager.git
-   cd assignment-manager
+   git clone https://github.com/rasoul6094/Cloud-Assignment.git
+   cd  Cloud-Assignment
+   cd  soli-ctf/Cloud-Assignment/soli-ctf/q4
    ```
 
 2. **Run with Docker Compose**
@@ -182,7 +183,7 @@ docker-compose down -v
 
 ## 👨‍💻 Author
 
-* **Your Name** – [Rasoul_Salehi(soli)](https://github.com/rasoul6094)
+ – [Rasoul_Salehi(soli)](https://github.com/rasoul6094)
 
 ---
 
