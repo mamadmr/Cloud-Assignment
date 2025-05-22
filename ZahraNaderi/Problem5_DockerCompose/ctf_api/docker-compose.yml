@@ -1,0 +1,83 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:13
+    restart: always
+    environment:
+      POSTGRES_USER: ZahraNaderi
+      POSTGRES_PASSWORD: zahra
+      POSTGRES_DB: ctf_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - ctf_net
+
+  redis:
+    image: redis:6
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - ctf_net
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: fastapi_app
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://ZahraNaderi:zahra@db:5432/ctf_db
+      - REDIS_URL=redis://redis:6379/0
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+      - .:/code
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - db
+      - redis
+    networks:
+      - ctf_net
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    container_name: celery_worker
+    depends_on:
+      - redis
+      - db
+    environment:
+      - DATABASE_URL=postgresql://ZahraNaderi:zahra@db:5432/ctf_db
+      - REDIS_URL=redis://redis:6379/0
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+      - .:/code
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - ctf_net
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - ctf_net
+
+  redisinsight:
+    image: redis/redisinsight:latest
+    container_name: redisinsight
+    restart: always
+    ports:
+      - "5540:5540"
+    networks:
+      - ctf_net
+
+volumes:
+  postgres_data:
+
+networks:
+  ctf_net:
