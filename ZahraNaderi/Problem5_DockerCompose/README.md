@@ -184,7 +184,7 @@ All these services run inside Docker containers orchestrated by Docker Compose o
    ```
    POST /api/assign/
    {
-     "team_id": "team2",
+     "team_id": "team14",
      "challenge_id": "juice"
    }
    ```
@@ -220,6 +220,29 @@ All these services run inside Docker containers orchestrated by Docker Compose o
     "challenge_id": "todo"
   }
   ```
+
+---
+## Challenge Assignment Result
+
+After successfully sending the POST request to assign the Juice Shop challenge to Team14:
+
+```json
+POST /api/assign/
+{
+  "team_id": "team14",
+  "challenge_id": "juice"
+}
+```
+
+The following record was added to the table:
+
+| ID | Team ID | Challenge ID | Container ID                                                     | URL                                              | Timestamp                  |
+| -- | ------- | ------------ | ---------------------------------------------------------------- | ------------------------------------------------ | -------------------------- |
+| 6  | team14  | juice        | d76efad807c4e80f5be976a53941135d575aeaf9793aea92fd5066028e3c316c | [http://localhost:32792](http://localhost:32792) | 2025-05-22 19:52:56.585741 |
+
+When I accessed the provided URL, the Juice Shop challenge web application loaded successfully as shown in the screenshot below:
+
+![Juice Shop Screenshot](https://github.com/Z-Naderi/Cloud-Assignment/blob/zahra-naderi/ZahraNaderi/Problem5_DockerCompose/screenshots/juice.png)
 
 ---
 
