@@ -2,7 +2,9 @@
 
 This project is a Django-based backend for a Capture The Flag (CTF) platform that dynamically manages Docker containers per team and challenge. It uses Celery for asynchronous task processing and Docker for container orchestration.
 
----
+<h2>Video (Questions 4–5)</h2>
+<a href="https://iutbox.iut.ac.ir/index.php/s/SspgSDHg9rD3oqG" target="_blank">Watch the video on iutbox</a>
+
 
 ## Project Structure
 
@@ -49,7 +51,7 @@ This command will:
 
 * Build the Django web application image
 * Start the database, Redis, web server, and Celery worker containers
-* Run database migrations (if configured)
+* Run database migrations
 
 ### Create a Django Superuser
 
