@@ -1,0 +1,60 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: ctf_db
+    environment:
+      POSTGRES_USER: ctftest
+      POSTGRES_PASSWORD: ctftest
+      POSTGRES_DB: ctfdb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - ctf-net
+
+  redis:
+    image: redis:7-alpine
+    container_name: ctf_redis
+    networks:
+      - ctf-net
+
+  worker:
+    build:
+      context: ../Problem4_API/worker      
+      dockerfile: Dockerfile
+    container_name: ctf_worker
+    depends_on:
+      - redis
+    environment:
+      BROKER_URL: redis://ctf_redis:6379/0
+      BACKEND_URL: redis://ctf_redis:6379/1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - ctf-net
+
+  api:
+    build:
+      context: ../Problem4_API/api         
+      dockerfile: Dockerfile
+    container_name: ctf_api
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+asyncpg://ctftest:ctftest@ctf_db:5432/ctfdb
+      REDIS_URL: redis://ctf_redis:6379/0
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - ctf-net
+
+volumes:
+  pgdata:
+
+networks:
+  ctf-net:
+    driver: bridge

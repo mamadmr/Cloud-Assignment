@@ -1,0 +1,19 @@
+services:
+  redis:
+    image: redis:7
+    container_name: ctf_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+
+  worker:
+    build: ./worker
+    container_name: ctf_worker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - redis
+
+volumes:
+  redisdata:

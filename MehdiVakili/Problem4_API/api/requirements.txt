@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+SQLAlchemy>=1.4
+asyncpg
+pydantic
+redis
+celery
+docker
+psycopg2-binary
