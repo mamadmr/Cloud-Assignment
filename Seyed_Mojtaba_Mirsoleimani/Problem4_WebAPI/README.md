@@ -109,15 +109,15 @@ The API will be available at: `http://localhost:5000`
 
 ---
 
-🧪 API Usage
-➕ POST /assign_container
+## 🧪 API Usage
+
+### ➕ POST `/assign_container`
+
 Assign a challenge container to a specific team.
 
-Request:
+**Request:**
 
-h
-Copy
-Edit
+```http
 POST /assign_container
 Content-Type: application/json
 
@@ -125,23 +125,26 @@ Content-Type: application/json
   "team_id": 1,
   "challenge_id": 42
 }
-Response:
+```
 
-json
-Copy
-Edit
+**Response:**
+
+```json
 {
   "message": "Container assigned successfully.",
   "container_address": "http://localhost:8001"
 }
-➖ POST /remove_container
+```
+
+---
+
+### ➖ POST `/remove_container`
+
 Remove a previously assigned challenge container for a team.
 
-Request:
+**Request:**
 
-http
-Copy
-Edit
+```http
 POST /remove_container
 Content-Type: application/json
 
@@ -149,14 +152,15 @@ Content-Type: application/json
   "team_id": 1,
   "challenge_id": 42
 }
-Response:
+```
 
-json
-Copy
-Edit
+**Response:**
+
+```json
 {
   "message": "Container removed successfully."
 }
+```
 
 ---
 
