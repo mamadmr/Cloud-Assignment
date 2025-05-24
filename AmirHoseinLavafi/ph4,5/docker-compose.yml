@@ -1,0 +1,52 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: ctf
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - datavol:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+
+  api:
+    build: ./api
+    ports:
+      - "5000:5000"
+    environment:
+      - DB_NAME=ctf
+      - DB_USER=postgres
+      - DB_PASS=postgres
+      - DB_HOST=db
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - db
+      - redis
+
+
+  worker:
+    build: ./api
+    command: celery -A tasks worker --loglevel=info
+    environment:
+      - DB_NAME=ctf
+      - DB_USER=postgres
+      - DB_PASS=postgres
+      - DB_HOST=db
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - redis
+      - db
+
+volumes:
+  datavol:
