@@ -1,0 +1,43 @@
+#version: '3.9'
+
+services:
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: ctfadmin
+      POSTGRES_PASSWORD: ctfpass
+      POSTGRES_DB: ctfdb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - ctf-net
+
+  redis:
+    image: redis
+    networks:
+      - ctf-net
+
+  api:
+    build: ./api
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - ctf-net
+
+  worker:
+    build: ./worker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - redis
+    networks:
+      - ctf-net
+
+volumes:
+  pgdata:
+
+networks:
+  ctf-net:
