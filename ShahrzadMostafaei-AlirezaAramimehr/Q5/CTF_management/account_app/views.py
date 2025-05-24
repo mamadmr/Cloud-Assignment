@@ -19,7 +19,7 @@ class StartContainerAPIView(APIView):
                 validated_data = serializer.validated_data
                 user = validated_data['user']  
                 image_name = validated_data['image_name']
-                container_name = validated_data['container_name'] +'-ID-'+str(user.pk)
+                container_name = validated_data['container_name'] 
                 ports = {}
 
                 task = app.send_task('account_app.tasks.start_ctf_container', args=[image_name, container_name, ports])
