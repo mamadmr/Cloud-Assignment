@@ -1,0 +1,8 @@
+fastapi==0.68.1
+uvicorn==0.15.0
+celery==5.2.0
+redis==4.3.4
+psycopg2-binary==2.9.3
+python-dotenv==0.19.0
+docker==7.1.0  # Update to latest version
+sqlalchemy==1.4.32
