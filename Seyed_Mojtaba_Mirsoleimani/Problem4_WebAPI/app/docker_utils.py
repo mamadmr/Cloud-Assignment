@@ -5,7 +5,7 @@ client = docker.from_env()
 def start_container(team_id, challenge_id):
     name = f"{team_id}_{challenge_id}"
     container = client.containers.run(
-        "challenge_image",  # فرض بر اینکه ایمیج چالش آماده است
+        "challenge_image", 
         detach=True,
         name=name,
         ports={"80/tcp": None}
