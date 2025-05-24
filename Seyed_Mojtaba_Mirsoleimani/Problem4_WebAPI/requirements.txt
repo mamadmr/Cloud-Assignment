@@ -1,0 +1,6 @@
+flask
+flask_sqlalchemy
+psycopg2-binary
+celery
+redis
+docker

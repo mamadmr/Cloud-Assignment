@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+      - redis
+    environment:
+      - FLASK_ENV=development
+      - DATABASE_URL=postgresql://ctf_user:admin123@db/ctf_db
+      - REDIS_BROKER_URL=redis://redis:6379/0
+
+  db:
+    image: postgres:13
+    restart: always
+    environment:
+      POSTGRES_USER: ctf_user
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: ctf_db
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+
+  worker:
+    build: .
+    command: celery -A celery_worker.celery worker --loglevel=info
+    depends_on:
+      - web
+      - redis
+    environment:
+      - DATABASE_URL=postgresql://ctf_user:admin123@db/ctf_db
+      - REDIS_BROKER_URL=redis://redis:6379/0

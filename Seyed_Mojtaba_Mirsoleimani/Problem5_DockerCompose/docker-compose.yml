@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    command: python run.py
+    ports:
+      - "5000:5000"
+    environment:
+      - DATABASE_URL=postgresql://ctf_user:admin123@db:5432/ctf_db
+      - CELERY_BROKER_URL=redis://redis:6379/0
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - .:/code
+    networks:
+      - backend
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: ctf_user
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: ctf_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - backend
+
+  celery:
+    build: .
+    command: celery -A celery_worker.celery worker --loglevel=info
+    depends_on:
+      - web
+      - redis
+    environment:
+      - DATABASE_URL=postgresql://ctf_user:admin123@db:5432/ctf_db
+      - CELERY_BROKER_URL=redis://redis:6379/0
+    volumes:
+      - .:/code
+    networks:
+      - backend
+
+volumes:
+  postgres_data:
+
+networks:
+  backend:
