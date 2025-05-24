@@ -49,8 +49,8 @@ Design and implement a **web API** with two main endpoints:
 ### 1. Clone the Repository
 
 ```bash
-git clone 
-cd 
+git clone https://github.com/SeyedMojtaba1/Cloud-Assignment.git
+cd Seyed_Mojtaba_Mirsoleimani/Problem4_WebAPI
 ````
 
 ### 2. Create and Activate a Virtual Environment
