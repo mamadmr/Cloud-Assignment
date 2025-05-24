@@ -57,8 +57,8 @@ All containers are on the same `backend` network, allowing services to communica
 1. **Clone the repository**
 
 ```bash
-git clone 
-cd 
+git clone https://github.com/SeyedMojtaba1/Cloud-Assignment.git
+cd Seyed_Mojtaba_Mirsoleimani/Problem5_DockerCompose
 ````
 
 2. **Build and run with Docker Compose**
