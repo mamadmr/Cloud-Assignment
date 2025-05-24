@@ -1,40 +1,44 @@
-##  ویژگی‌ها
-
-* استفاده از FastAPI برای طراحی REST API
-* Celery + Redis برای پردازش وظایف در پس‌زمینه
-* PostgreSQL به‌عنوان پایگاه‌داده
-* ذخیره‌سازی داده فقط در صورت موفقیت آمیز بودن تسک Celery
-* حذف کانتینرها به‌صورت ایمن
-* بازگرداندن آدرس منحصربه‌فرد هر کانتینر (IP/PORT)
+# CTF Container Manager API
 
 ---
 
-##  ساختار پروژه
+## Features
+
+* Uses FastAPI to design a REST API
+* Celery + Redis for background task processing
+* PostgreSQL as the database
+* Stores data only if the Celery task is successful
+* Securely deletes containers
+* Returns a unique address (IP/PORT) for each container
+
+---
+
+## Project Structure
 
 ```
 project/
-├── .env                   
-├── Dockerfile             
+├── .env                    
+├── Dockerfile              
 ├── docker-compose.yml      
 ├── requirements.txt        
 └── app/
     ├── main.py             
-    ├── tasks.py           
-    ├── database.py        
-    └── models.py         
+    ├── tasks.py            
+    ├── database.py         
+    └── models.py           
 ```
 
 ---
 
-## 📡 APIها
+## API Endpoints
 
-### 🎯 ساخت کانتینر
+### Create Container
 
 ```http
 POST /create
 ```
 
-📥 پاسخ:
+Response:
 
 ```json
 {
@@ -48,13 +52,13 @@ POST /create
 
 ---
 
-### ❌ حذف کانتینر
+### Delete Container
 
 ```http
 DELETE /delete/{container_name}
 ```
 
-📥 پاسخ:
+Response:
 
 ```json
 { "message": "Container deleted successfully" }
@@ -62,13 +66,13 @@ DELETE /delete/{container_name}
 
 ---
 
-### 🔄 بررسی وضعیت Task
+### Check Task Status
 
 ```http
 GET /task/{task_id}
 ```
 
-📥 پاسخ:
+Response:
 
 ```json
 {
@@ -79,3 +83,4 @@ GET /task/{task_id}
   }
 }
 ```
+
