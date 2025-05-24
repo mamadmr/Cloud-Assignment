@@ -92,8 +92,8 @@ curl -X POST http://localhost:8000/assign_challenge \
 ```
 
 
-(![images](assign_pic.jpg))
-(![images](assigned_container_pic.jpg))
+(![images](./images/assign_pic.jpg))
+(![images](./images/assigned_container_pic.jpg))
 
 
 📌 حذف چالش:
@@ -103,8 +103,8 @@ curl -X POST http://localhost:8000/remove_challenge \
   -d '{"team_id": 1, "challenge_id": "juice_shop"}'
 ```
 
-(![images](remove_pic.jpg))
-(![images](removed_container_pic.jpg))
+(![images](./images/remove_pic.jpg))
+(![images](./images/removed_container_pic.jpg))
 
 ## 🧼 پاک‌سازی پروژه
 
