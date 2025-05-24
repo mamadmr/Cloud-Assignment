@@ -40,8 +40,8 @@ worker_test_i
 ```        
 
 # ساخته شدن و حذف شدن کانتینر جدید
-(![images](3_1.jpg))
-(![images](3_2.jpg))
+(![images](./images/3_1.jpg))
+(![images](./images/3_2.jpg))
 # لاگ کانتینر ها
-(![images](3_3.jpg))
-(![images](3_4.jpg))
+(![images](./images/3_3.jpg))
+(![images](./images/3_4.jpg))
