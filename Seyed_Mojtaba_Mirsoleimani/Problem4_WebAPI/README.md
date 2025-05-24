@@ -1,4 +1,4 @@
-````markdown
+
 # Web API for Secure CTF Flag Storage 🏁
 
 This repository contains a Flask-based web API designed to **securely store and retrieve flags** in a Capture The Flag (CTF) environment. The system is built to interact with two essential services: a **PostgreSQL** database for persistent storage and a **Redis** server for temporary in-memory data operations.
