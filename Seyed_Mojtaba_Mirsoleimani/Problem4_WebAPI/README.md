@@ -109,48 +109,54 @@ The API will be available at: `http://localhost:5000`
 
 ---
 
-## 🧪 API Usage
+🧪 API Usage
+➕ POST /assign_container
+Assign a challenge container to a specific team.
 
-### ➕ POST `/flags`
+Request:
 
-**Request:**
-
-```http
-POST /flags
+h
+Copy
+Edit
+POST /assign_container
 Content-Type: application/json
 
 {
-  "user": "alice",
-  "flag": "FLAG-CTF123"
+  "team_id": 1,
+  "challenge_id": 42
 }
-```
+Response:
 
-**Response:**
-
-```json
+json
+Copy
+Edit
 {
-  "message": "Flag stored successfully."
+  "message": "Container assigned successfully.",
+  "container_address": "http://localhost:8001"
 }
-```
+➖ POST /remove_container
+Remove a previously assigned challenge container for a team.
 
----
+Request:
 
-### 🔍 GET `/flags/<user>`
+http
+Copy
+Edit
+POST /remove_container
+Content-Type: application/json
 
-**Request:**
-
-```http
-GET /flags/alice
-```
-
-**Response:**
-
-```json
 {
-  "user": "alice",
-  "flag": "FLAG-CTF123"
+  "team_id": 1,
+  "challenge_id": 42
 }
-```
+Response:
+
+json
+Copy
+Edit
+{
+  "message": "Container removed successfully."
+}
 
 ---
 
