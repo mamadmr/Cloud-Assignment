@@ -1,145 +1,30 @@
-# PostgreSQL Container with Automatic Schema Initialization
+# Problem 5: Docker Compose Integration – Full System README
 
-This document explains how to set up a PostgreSQL container that automatically initializes with your database schema and sample data when it starts.
+## Overview
 
-## How It Works
+This project combines all components of a CTF (Capture The Flag) management system using Docker Compose. It consists of microservices for database management, Redis queueing, Celery-based task execution, a web API, and dynamic challenge containers.
 
-PostgreSQL's official Docker image looks for initialization scripts in the `/docker-entrypoint-initdb.d/` directory. Any `.sql`, `.sql.gz`, or `.sh` files in this directory will be executed in alphabetical order when the container is first initialized.
+## How Services Are Connected
 
-## Setup Instructions
+The system is composed of four main services:
 
-### 1. Create the SQL Initialization Script
+- **PostgreSQL** stores all persistent information, including which team is assigned to which challenge.
+- **Redis** acts as the broker and result backend for Celery.
+- **Celery** executes background tasks such as starting or stopping challenge containers.
+- **FastAPI Web API** allows clients to assign and remove challenges via HTTP endpoints.
 
-Create a file named `init-db.sql` with your database schema and sample data:
+These services communicate internally through a shared Docker network, ensuring isolated and reliable inter-service communication. The Celery worker uses Docker SDK to manage containers based on requests received from the FastAPI service.
 
-```sql
--- Create a new database
-CREATE DATABASE ctf_db;
+## How to Start and Use the System
 
--- Connect to the newly created database
-\connect ctf_db;
+1. Navigate to the `AlirezaMirzaei` root directory in your terminal.
+2. Move into the `Problem5_DockerCompose` folder.
+3. Ensure that the `.env` file exists inside `Problem4_WebAPI` and contains the required configuration.
+4. Start the system with `docker-compose up --build`.
+5. Use the Python script provided in `Problem4_WebAPI/test_api.py` or any HTTP client (like curl or Postman) to assign and remove challenges for different teams.
 
--- Create a table to store team information
-CREATE TABLE teams (
-    id SERIAL PRIMARY KEY,
-    team_name VARCHAR(100) NOT NULL,
-    challenge_assigned BOOLEAN DEFAULT FALSE
-);
+The API provides two main endpoints:
 
--- Insert sample data into the table
-INSERT INTO teams (team_name, challenge_assigned)
-VALUES
-    ('Red Team', true),
-    ('Blue Team', false),
-    ('Green Team', false);
+- `/assign` — Starts a challenge container and registers it.
+- `/remove` — Stops the container and updates the database.
 
--- Update a team's challenge assignment status
-UPDATE teams
-SET challenge_assigned = true
-WHERE team_name = 'Blue Team';
-
--- Delete a team from the table
-DELETE FROM teams
-WHERE team_name = 'Red Team';
-
--- Insert an additional row as requested
-INSERT INTO teams (team_name, challenge_assigned)
-VALUES ('Yellow Team', true);
-
--- Final state of the table
-SELECT * FROM teams;
-```
-
-### 2. Create a Bash Script to Run the Container
-
-Create a file named `setup-postgres.sh`:
-
-```bash
-#!/bin/bash
-
-# Create volume for PostgreSQL data persistence
-docker volume create postgres_data
-
-# Run PostgreSQL container with initialization
-docker run --name postgres_ctf \
-  -e POSTGRES_PASSWORD=secretpassword \
-  -d \
-  -p 5432:5432 \
-  -v postgres_data:/var/lib/postgresql/data \
-  -v $(pwd)/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql \
-  postgres:latest
-
-# Wait for PostgreSQL to be ready
-echo "Waiting for PostgreSQL to initialize..."
-sleep 5
-
-# Verify container is running
-docker ps -a | grep postgres_ctf
-
-echo "PostgreSQL container initialized with your database schema!"
-```
-
-### 3. Make the Script Executable and Run It
-
-```bash
-chmod +x run-postgres.sh
-./setup-postgres.sh
-```
-
-## Important Notes
-
-1. **First-Time Initialization Only**: The initialization scripts only run when the container is first created and the data volume is empty. If you stop and restart the container, the scripts will not run again.
-
-2. **Checking Initialization Results**: You can check if your initialization worked by connecting to the database:
-
-   ```bash
-   docker exec -it postgres_ctf psql -U postgres -d ctf_db -c "SELECT * FROM teams;"
-   ```
-
-3. **For Re-initialization**: If you need to rerun the initialization, you must remove both the container and the volume:
-
-   ```bash
-   docker stop postgres_ctf
-   docker rm postgres_ctf
-   docker volume rm postgres_data
-   ./setup-postgres.sh
-   ```
-
-## Demonstration
-
-When you run the setup script:
-
-1. A Docker volume named `postgres_data` is created for data persistence
-2. The PostgreSQL container starts with the initialization script mounted
-3. PostgreSQL automatically executes the initialization script
-4. The database, tables, and sample data are created
-
-After the container initialization, your database will contain:
-- A database named `ctf_db`
-- A table named `teams` with:
-  - Blue Team (challenge_assigned = true)
-  - Green Team (challenge_assigned = false)
-  - Yellow Team (challenge_assigned = true)
-- The Red Team row was deleted as per your SQL script
-
-## For Docker Compose Integration
-
-For Docker Compose later on, we will place our initialization script in a directory and map it in the services section:
-
-```yaml
-services:
-  postgres:
-    image: postgres:latest
-    environment:
-      POSTGRES_PASSWORD: somepassword
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./postgres-init:/docker-entrypoint-initdb.d
-    ports:
-      - "5432:5432"
-
-volumes:
-  postgres_data:
-```
-
-Then we place our `init-db.sql` file in the `./postgres-init` directory to initialize the db.
