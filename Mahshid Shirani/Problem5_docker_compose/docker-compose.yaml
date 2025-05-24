@@ -1,0 +1,64 @@
+services:
+  redis:
+    image: redis:6
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: ctfuser
+      POSTGRES_PASSWORD: ctfpassword
+      POSTGRES_DB: ctfdb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ctfuser -d ctfdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build: .
+    command: sh -c "sleep 10 && uvicorn main:app --host 0.0.0.0 --port 8000"
+    volumes:
+      - .:/app
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - DATABASE_URL=postgresql://ctfuser:ctfpassword@db:5432/ctfdb
+    ports:
+      - "8001:8000"
+    privileged: true
+    depends_on:
+      redis:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+
+  worker:
+    build: .
+    command: sh -c "sleep 15 && celery -A tasks worker --loglevel=info"
+    volumes:
+      - .:/app
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - DATABASE_URL=postgresql://ctfuser:ctfpassword@db:5432/ctfdb
+    privileged: true
+    depends_on:
+      - redis
+      - db
+
+volumes:
+  redis_data:
+  postgres_data:
