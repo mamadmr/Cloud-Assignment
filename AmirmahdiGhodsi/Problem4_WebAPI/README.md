@@ -49,14 +49,14 @@ app = Celery('CTF',
 3- Endpoint api/stop-container:
 ```
 {
-    "user": "Example_team",
+    "user": "Example_team"
 }
 ```
 
 4- Endpoint api/remove-container:
 ```
 {
-    "user": "Example_team",
+    "user": "Example_team"
 }
 ```
 
