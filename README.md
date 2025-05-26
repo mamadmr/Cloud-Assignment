@@ -8,9 +8,9 @@ Please follow these steps to complete and submit your assignment:
 
 1. **Fork this repository**:  
 
-
 2. **Create a folder with your full name** in the root of the project.  
    Example:
+
 ```
       MohamadMahdiReisi/
     ├── Problem1_PostgreSQL/
@@ -26,6 +26,7 @@ Please follow these steps to complete and submit your assignment:
 5. **Upload required videos** (demonstration videos) to **IUT Box** or any cloud storage, and **add the video links** inside a `README.md` file within each problem folder.
 
 6. **Write your explanations and answers** as a Markdown file (`README.md`) in each problem folder. Include:
+
 - Description of what you did
 - Steps to run your solution
 - Reasoning behind any decisions or tools you chose
