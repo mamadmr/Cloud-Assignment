@@ -1,0 +1,8 @@
+Django==4.2.7
+djangorestframework==3.14.0
+psycopg2-binary==2.9.10
+redis==5.0.1
+celery==5.3.6
+docker==7.0.0
+gunicorn==21.2.0
+requests==2.31.0
