@@ -1,0 +1,56 @@
+version: '3.9'
+
+volumes:
+  postgres-db:
+
+
+services:
+
+  postgres:
+    image: postgres:13
+    expose:
+      - 5432:5432
+    env_file:
+      - .env.database
+    volumes:
+      - postgres-db:/var/lib/postgresql/data
+
+  backend:
+    build: ./cloud
+    env_file:
+      - .env.backend
+    ports:
+      - "3003:8001"
+    restart: always
+    container_name: cloudbackend
+    depends_on:
+      - postgres
+    command: sh -c ' until pg_isready -h postgres -p 5432; do echo "Waiting for postgres..."; sleep 1; done; python manage.py makemigrations --noinput && python manage.py migrate --noinput && python manage.py collectstatic --noinput && gunicorn cloud.wsgi:application --bind 0.0.0.0:8001'
+
+  redis:
+    image: redis:7.0
+    container_name: cloudredis
+    expose:
+      - 6379
+    ports:
+      - "6391:6379"
+
+  celery:
+    image: celery:5.2
+    container_name: cloudcelery
+    build: ./celery
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock # Mount Docker socket to allow Celery to communicate with Docker
+    depends_on:
+      - redis
+    env_file:
+      - .env.celery
+    command: sh -c 'until pg_isready -h postgres -p 5432; do echo "Waiting for postgres..."; sleep 1; done; celery -A tasks worker --loglevel=info '
+
+networks:
+  mynetwork2:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.1.0/24
