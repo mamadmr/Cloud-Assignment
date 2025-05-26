@@ -1,0 +1,8 @@
+FROM python:3.11-slim
+
+WORKDIR /src
+COPY . .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+CMD ["celery", "-A", "worker.manager", "worker", "--loglevel=info"]

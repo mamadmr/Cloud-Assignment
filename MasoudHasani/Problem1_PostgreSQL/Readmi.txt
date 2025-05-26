@@ -1,0 +1,64 @@
+Masoud Hasani 40121243
+
+(i) Run a PostgreSQL container in Docker.
+-->
+docker run --name my-postgres \
+  -e POSTGRES_USER=myuser \
+  -e POSTGRES_PASSWORD=mypassword \
+  -e POSTGRES_DB=mydb \
+  -p 5432:5432 \
+  -v pgdata:/var/lib/postgresql/data \
+  -d postgres
+
+
+(ii) Make sure the container is configured so that its data remains available after
+restarts. Use Docker volumes or bind mounts to achieve this.
+-->
+docker ps -a    
+docker volume ls
+
+
+
+
+Perform Basic Database Operations:
+(i) Connect to the PostgreSQL database with any client or command-line tool.
+-->
+docker exec -it my-postgres psql -U myuser -d mydb
+
+(ii) Execute SQL commands to:
+(a) Create a new database.
+-->
+CREATE DATABASE testdb;
+
+(b) Create a table in that database.
+-->
+goto testdb: \c testdb
+create table: CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100),
+    age INT
+);
+
+
+(c) Insert some data into the table.
+-->
+INSERT INTO users (name, age) VALUES
+('Alice', 25),
+('Bob', 30),
+('Charlie', 22);
+
+(d) Retrieve and display the data to verify everything worked.
+-->
+SELECT * FROM users;
+
+
+to quit:\q
+
+
+to remove all:
+
+stop container --> docker stop my-postgres
+remove container --> docker rm my-postgres
+delete volome -->  docker volume rm pgdata
+check --> docker ps -a    
+	  docker volume ls     

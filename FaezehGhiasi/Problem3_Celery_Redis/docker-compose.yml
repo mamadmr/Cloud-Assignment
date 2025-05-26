@@ -1,0 +1,28 @@
+services:
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+  celery_worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    container_name: celery_worker
+    depends_on:
+      - redis
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+
+  test_runner:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    container_name: test_runner
+    depends_on:
+      - celery_worker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock   
+    restart: "no"

@@ -1,0 +1,57 @@
+services:
+  db:
+    container_name: ctf_postgress
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: secret_password
+      POSTGRES_DB: ctf_database
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+  redis:
+    container_name: my-redis
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+  celery:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: celery_worker
+    image: python:3.10
+    command: celery -A my_celery_app.tasks worker --loglevel=info
+    volumes:
+      - .:/app
+      - /var/run/docker.sock:/var/run/docker.sock  # Mount Docker socket
+    working_dir: /app
+    depends_on:
+      - redis
+      - db
+    restart: unless-stopped
+  
+  webapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: webapi
+    image: python:3.10
+    command: uvicorn webapi.main:app --reload
+    volumes:
+      - .:/app
+      - /var/run/docker.sock:/var/run/docker.sock  # Mount Docker socket
+    working_dir: /app
+    depends_on:
+      - celery
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+
+volumes:
+  pgdata:
