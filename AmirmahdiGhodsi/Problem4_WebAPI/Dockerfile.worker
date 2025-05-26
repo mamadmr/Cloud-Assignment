@@ -1,0 +1,21 @@
+# Use the same base image as the Django API for consistency
+FROM python:3.12-slim-bookworm
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+# Set working directory
+WORKDIR /app
+
+# Install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy project files
+COPY . .
+
+# Copy docker.sock volume will be attached at runtime
+
+# Start the Celery worker
+CMD ["celery", "-A", "api.tasks", "worker", "--loglevel=info"]

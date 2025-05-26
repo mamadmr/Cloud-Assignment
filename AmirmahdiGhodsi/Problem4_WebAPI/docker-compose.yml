@@ -1,0 +1,59 @@
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: ctfdb
+      POSTGRES_USER: ctfuser
+      POSTGRES_PASSWORD: ctfpass
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - ctf-net
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - ctf-net
+
+  django:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: django_api
+    command: sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/app
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+      - postgres
+    networks:
+      - ctf-net
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    container_name: celery_worker
+    volumes:
+      - .:/app
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - redis
+      - django
+    networks:
+      - ctf-net
+
+volumes:
+  postgres_data:
+
+networks:
+  ctf-net:
