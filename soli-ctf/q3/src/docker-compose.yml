@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    restart: always
+
+  celery_worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - redis
+    restart: always
+
+  test_launcher:
+    build:
+      context: .
+      dockerfile: Dockerfile.runner
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - celery_worker
+    restart: "no"
