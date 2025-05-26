@@ -1,0 +1,40 @@
+Masoud Hasani 40121243
+
+
+
+Set Up Celery with Redis as the Message Broker:
+(i) Configure Celery to use Redis as its message broker.
+-->
+configuration: mycelery.py
+exec : celery -A mycelery worker --loglevel=info
+
+(ii) Make sure Celery can connect to Redis and run successfully.
+-->
+if all right output must be :
+[INFO/MainProcess] Connected to redis://localhost:6379/0
+[INFO/MainProcess] Ready.
+
+
+
+Implement Celery Tasks for Container Management:
+(i) Write Celery tasks that:
+(a) Start a Docker container for a specific CTF challenge.
+(b) Stop a running Docker container using its ID.
+-->
+configuration: mycelery.py
+celery -A mycelery worker --loglevel=info
+task a,b : docker_tasks.py
+
+(ii) Make sure these tasks run in the background (asynchronously) and handle any errors gracefully.
+-->
+celery -A mycelery status
+
+
+
+
+
+Demonstrate Task Execution and Container Lifecycle Management:
+(i) Call the Celery tasks to start and stop Docker containers.
+(ii) Observe and confirm that the containers change state as expected before and after running the tasks.
+--> 
+test.py
