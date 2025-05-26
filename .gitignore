@@ -1,10 +1,1 @@
-__pycache__/
-AlirezaMirzaei/Problem3_Celery/celery_app/__pycache__/tasks.cpython-313.pyc
-AlirezaMirzaei/Problem2_Redis/redis.conf
-AlirezaMirzaei/Problem2_Redis/redis-data
-AlirezaMirzaei/Problem2_Redis/consumer.log
-.pyc
-.env
-AlirezaMirzaei/Problem3_Celery/celery_app/__pycache__/tasks.cpython-313.pyc
-AlirezaMirzaei/Problem2_Redis/redis_data/appendonly.aof
-AlirezaMirzaei/Problem2_Redis/redis_data/dump.rdb
+
