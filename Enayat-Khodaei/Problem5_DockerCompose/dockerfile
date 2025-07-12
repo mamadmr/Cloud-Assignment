@@ -1,0 +1,9 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+COPY . .
+
+RUN pip install flask celery redis docker psycopg2-binary flask_sqlalchemy
+
+CMD ["flask", "run", "--host=0.0.0.0"]
